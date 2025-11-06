@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Getting Started with Highcharts</title>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/annotations.js"></script>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+                color: #333;
+            }
+
+            h1 {
+                border-bottom: 2px solid #333;
+                padding-bottom: 10px;
+            }
+
+            h2 {
+                border-bottom: 1px solid #666;
+                padding-bottom: 8px;
+                margin-top: 40px;
+            }
+
+            h3 {
+                margin-top: 30px;
+            }
+
+            /* Module styling */
+            h2[id^='module'] {
+                background: #e3e3e8;
+                padding: 20px;
+                margin-top: 60px;
+                margin-bottom: 30px;
+                border-left: 5px solid #434348;
+                border-bottom: none;
+            }
+
+            /* Add spacing before each module */
+            h2[id^='module']::before {
+                content: '';
+                display: block;
+                height: 40px;
+                margin-top: -40px;
+            }
+
+            h3 {
+                margin-top: 30px;
+            }
+
+            /* Lesson styling */
+            h3[id^='lesson'] {
+                background: #f2f1f4;
+                padding: 12px 15px;
+                border-left: 6px solid #999;
+                margin-top: 65px;
+            }
+
+            h3[id^='lesson'].first {
+                margin-top: 25px;
+            }
+
+            .video-script {
+                font-style: italic;
+                color: #555;
+                padding: 15px;
+                border-left: 3px solid #999;
+                margin: 20px 0;
+            }
+
+            .chart-container {
+                margin: 20px 0;
+                min-height: 400px;
+            }
+
+            button {
+                padding: 8px 15px;
+                margin: 5px;
+                cursor: pointer;
+            }
+
+            .quiz {
+                border: 1px solid #ccc;
+                padding: 15px;
+                margin: 30px 0;
+            }
+
+            .answer {
+                background: #f0f0f0;
+                padding: 10px;
+                margin: 10px 0;
+            }
+
+            .video-container {
+                position: relative;
+                padding-bottom: 56.25%;
+                /* 16:9 aspect ratio */
+                height: 0;
+                overflow: hidden;
+            }
+
+            .video-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .toc {
+                border: 1px solid #ddd;
+                padding: 20px;
+                margin: 30px 0;
+                border-radius: 8px;
+            }
+
+            .toc h2 {
+                margin-top: 0;
+                border: none;
+                padding-bottom: 10px;
+            }
+
+            .toc ul {
+                list-style: none;
+                padding-left: 0;
+            }
+
+            .toc ul ul {
+                padding-left: 20px;
+                margin-top: 5px;
+            }
+
+            .toc li {
+                margin: 8px 0;
+            }
+
+            .toc a {
+                text-decoration: none;
+                color: #0066cc;
+            }
+
+            .toc a:hover {
+                text-decoration: underline;
+            }
+
+            .highcharts-figure {
+                display: block;
+                border-radius: 8px;
+                padding: 24px 24px 12px 24px;
+                margin: 12px 0;
+                border: 1px solid #ccc;
+                /* font-weight: bold; */
+                /* color: #18171c; */
+                background: #f7f7f8;
+            }
+
+            .highcharts-figure img {
+                width: 100%;
+            }
+
+            .highcharts-description {
+            }
+
+            .controls {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .sonify {
+                background-color: #fff;
+                border: 1px solid #25386f;
+                color: #25386f;
+                font-size: 0.9rem;
+                min-height: 30px;
+                font-weight: 500;
+                border-radius: 4px;
+                padding: 0.375rem 0;
+                width: 9rem;
+                margin-left: auto;
+                margin-bottom: 0.25rem;
+                margin-top: 0.25rem;
+                text-align: center;
+                cursor: pointer;
+            }
+
+            .sonify:hover {
+                background-color: #25386f;
+                color: #fff;
+            }
+
+            .toggle-container {
+            }
+
+            .toggle-container label {
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            input[type='radio'] {
+                margin-right: 5px;
+                cursor: pointer;
+            }
+
+            .highcharts-data-table table {
+                min-width: 360px;
+                max-width: 820px;
+                margin: 1em auto;
+                font-family: Verdana, sans-serif;
+            }
+
+            .highcharts-data-table table {
+                font-family: Verdana, sans-serif;
+                border-collapse: collapse;
+                border: 1px solid var(--highcharts-neutral-color-10, #e6e6e6);
+                margin: 10px auto;
+                text-align: center;
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .highcharts-data-table caption {
+                padding: 1em 0;
+                font-size: 1.2em;
+                color: var(--highcharts-neutral-color-60, #666);
+            }
+
+            .highcharts-data-table th {
+                font-weight: 600;
+                padding: 0.5em;
+            }
+
+            .highcharts-data-table td,
+            .highcharts-data-table th,
+            .highcharts-data-table caption {
+                padding: 0.5em;
+            }
+
+            .highcharts-data-table thead tr,
+            .highcharts-data-table tbody tr:nth-child(even) {
+                background: var(--highcharts-neutral-color-3, #fff);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Course 1: Getting Started with Highcharts</h1>
+
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#course-scope">Course Scope</a></li>
+                <li>
+                    <a href="#module1">Module 1: Introduction</a>
+                    <ul>
+                        <li>
+                            <a href="#lesson1-1"
+                                >Lesson 1: Intro to Highcharts</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#lesson1-2"
+                                >Lesson 2: Good to Know Before You Start</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#lesson1-3">Lesson 3: Knowledge Check</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#module2">Module 2: Your First Chart</a>
+                    <ul>
+                        <li>
+                            <a href="#lesson2-1"
+                                >Lesson 1: Creating a Simple Chart</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#lesson2-2">Lesson 2: Setting Options</a>
+                        </li>
+                        <!-- <li>
+                            <a href="#lesson2-3"
+                                >Lesson 3: Working with Highcharts</a
+                            >
+                        </li> -->
+                        <li>
+                            <a href="#lesson2-3">Lesson 3: Knowledge Check</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#wrap-up">Wrap Up</a></li>
+                <!-- <li>
+                    <a href="#module3">Module 3: Installation</a>
+                    <ul>
+                        <li>
+                            <a href="#lesson3-1">Lesson 1: Load from CDN</a>
+                        </li>
+                        <li>
+                            <a href="#lesson3-2">Lesson 3: Load Locally</a>
+                        </li>
+                        <li>
+                            <a href="#lesson3-3"
+                                >Lesson 2: Installation with NPM</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#lesson3-4"
+                                >Lesson 4: Installation with ES6 modules</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#lesson3-5"
+                                >Lesson 5: Installation with AMD or CommonJS
+                                modules</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#lesson3-6">Lesson 6: Custom Builds</a>
+                        </li>
+                        <li>
+                            <a href="#lesson3-6"
+                                >Lesson 7: Quiz - Installation Methods</a
+                            >
+                        </li>
+                    </ul>
+                </li> -->
+            </ul>
+        </div>
+
+        <div>
+            <h2 id="course-scope">Course Scope</h2>
+
+            <!-- <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/exg1RUyz_lg"
+                    frameborder="0"
+                    allowfullscreen
+                >
+                </iframe>
+            </div> -->
+
+            <p>
+                In this course, you will learn the basics of using Highcharts to
+                create interactive charts. We will start by learning about what
+                Highcharts <em>is</em>, after which we will create a basic chart
+                from scratch. After a basic setup, we will move on to make more
+                advanced customizations to the chart and get familiar with some
+                useful features.
+            </p>
+
+            <h3>What you will learn</h3>
+            <ul>
+                <li>What Highcharts is and its key features.</li>
+                <li>
+                    How to create an interactive chart using the Highcharts CDN
+                    and an online code editor.
+                </li>
+                <li>How Highcharts behaves out of the box.</li>
+                <li>How to use modules to extend Highcharts' functionality.</li>
+            </ul>
+
+            <h3>Prerequisites</h3>
+
+            <h4>Required</h4>
+            <ul>
+                <li>Basic knowledge of JavaScript, HTML, and CSS.</li>
+            </ul>
+
+            <h4>Not required</h4>
+            <ul>
+                <li>Advanced programming skills.</li>
+                <li>Prior Highcharts experience.</li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <div>
+            <h2 id="module1">Module 1: Introduction</h2>
+
+            <h3 id="lesson1-1">Lesson 1: Intro to Highcharts</h3>
+
+            <!-- <div class="video-container">
+                <iframe src="" frameborder="0" allowfullscreen> </iframe>
+            </div>
+            <p class="video-description">Video Missing. TBA.</p> -->
+
+            <h4>What is Highcharts?</h4>
+            <p>
+                Highcharts is a charting library that makes it easy for
+                developers to create interactive data visualizations in web
+                projects.
+            </p>
+            <ul>
+                <li>
+                    <strong>JavaScript-based:</strong> Highcharts is built in
+                    JavaScript and works smoothly in web environments without
+                    extra dependencies.
+                </li>
+                <li>
+                    <strong>Client-side:</strong> Highcharts runs entirely in
+                    the browser, making it portable and easy to integrate into
+                    existing projects. This also means Highcharts is
+                    backend-agnostic, so it can fetch and visualize data from
+                    any server setup or data source.
+                </li>
+                <li>
+                    <strong>Lightweight and modular:</strong> With a small
+                    footprint and minimal dependencies, Highcharts remains
+                    efficient. Additionally, its modular design lets you include
+                    only what you need.
+                </li>
+                <li>
+                    <strong>SVG-based graphics</strong> Highcharts uses SVG
+                    (Scalable Vector Graphics). This means chart elements are
+                    real DOM nodes that can be styled and animated with CSS or
+                    JavaScript, scaled without losing quality, and accessed by
+                    other web technologies. Compared to canvas-based rendering,
+                    this provides clearer structure, better rendering, and
+                    integration with the DOM.
+                </li>
+            </ul>
+
+            <h4>Key Features</h4>
+            <p>
+                Highcharts is flexible as well as easy to use. Beginners can
+                quickly get a chart up and running, while advanced users can
+                dive deeper. Here are some of the key features that make this
+                possible:
+            </p>
+            <ul>
+                <li>
+                    <strong>Responsiveness:</strong> In Highcharts, charts
+                    automatically adapt to the size of chart container, and they
+                    reflow when the browser window is resized to keep the
+                    content clear and readable. Additionally, you can add your
+                    own responsiveness rules, which can be used to modify the
+                    chart design and layout with varying screen sizes.
+                </li>
+                <li>
+                    <strong>Interactivity:</strong> Charts are interactive by
+                    default. For example, hovering over a data point shows its
+                    value in a tooltip, and the corresponding series highlights
+                    dynamically to draw attention to that part of the chart.
+                </li>
+                <li>
+                    <strong>Smart defaults:</strong> Highcharts provides
+                    sensible defaults for properties like colors, labels,
+                    layout, and more, so even a minimal configuration produces a
+                    clean and professional-looking chart.
+                </li>
+                <li>
+                    <strong>Flexible styling:</strong> Charts can be styled both
+                    through JavaScript options and via CSS in styled mode,
+                    giving developers freedom to choose the approach that best
+                    fits their workflow.
+                </li>
+                <li>
+                    <strong>Data handling:</strong> Highcharts supports dynamic
+                    and asynchronous updates, making it possible to stream data
+                    or refresh charts in real time without reloading the page.
+                    It also handles large datasets efficiently with features
+                    like boosting.
+                </li>
+                <li>
+                    <strong>Advanced customization capabilities:</strong> For
+                    advanced users, Highcharts can be extended and customized
+                    far beyond the built-in options. This includes the ability
+                    to add new features, draw custom elements, or even change
+                    how core parts of the library work. These capabilities make
+                    it possible to create unique visualizations and tailor
+                    charts to specific project needs.
+                </li>
+            </ul>
+
+            <h4>Key Accessibility Features</h4>
+            <p>
+                Highcharts includes extensive accessibility features. These are
+                important in order to make charts accessible to people with
+                disabilities. Below are some of the key features:
+            </p>
+            <ul>
+                <li>
+                    <strong>Screen reader support:</strong> Because of its SVG
+                    foundation, chart content is available to screen readers and
+                    assistive technologies, so users can get the same
+                    information as those viewing the chart visually. Highcharts
+                    also includes proper ARIA markup to describe chart elements
+                    in ways that assistive technologies understand.
+                </li>
+                <li>
+                    <strong>Keyboard navigation:</strong> Charts can be
+                    navigated and interacted with using the keyboard, ensuring
+                    users who cannot use a mouse can still explore the data.
+                </li>
+                <li>
+                    <strong>Accessibility-specific chart options:</strong>
+                    Developers can configure description text, series labels, or
+                    even custom keyboard navigation to make charts more
+                    accessible in different contexts.
+                </li>
+                <li>
+                    <strong>Low vision features:</strong> Highcharts supports
+                    color schemes such as high contrast mode and also offers
+                    pattern fills to improve readability for users with low
+                    vision or color blindness.
+                </li>
+                <li>
+                    <strong>Sonification (audible charts):</strong> Charts can
+                    be turned into sound using characteristics such as pitch,
+                    volume, or timbre to represent data variables. This allows
+                    users to interpret data through sound rather than visuals,
+                    which is especially beneficial for users with visual
+                    impairments.
+                </li>
+            </ul>
+
+            <h4>Additional Advantages</h4>
+            <ul>
+                <li>
+                    <strong>Broad browser support:</strong> Highcharts is tested
+                    across many browsers in their latest version.
+                </li>
+                <li>
+                    <strong>Mobile friendly:</strong> Charts adapt well to
+                    mobile devices with touch support and high-DPI rendering, so
+                    they remain clear and usable on phones and tablets.
+                </li>
+                <li>
+                    <strong>Export options:</strong> Charts can be exported to
+                    PNG, JPEG, PDF, and SVG. In addition, data can be exported
+                    to CSV, XLS, and HTML tables. Exporting can be done directly
+                    in the client browser, or by using an export server, which
+                    can also be self-hosted for full control.
+                </li>
+                <li>
+                    <strong>Official framework integrations:</strong> Highcharts
+                    offers official integrations with frameworks like React,
+                    Vue, and Angular, making it easier to embed charts in modern
+                    web apps.
+                </li>
+                <li>
+                    <strong>Strong documentation and active community:</strong>
+                    Highcharts has an intuitive API, is backed by extensive
+                    documentation, and has an engaged community, helping
+                    developers learn, troubleshoot, and share solutions.
+                </li>
+            </ul>
+            <p>
+                Altogether, the Highcharts suite offers developers a
+                professional, flexible, and accessible way to bring data to life
+                on the web.
+            </p>
+
+            <h4>The Highcharts Product Suite</h4>
+            <p>
+                In this course, we will be working with Highcharts Core, the
+                main Highcharts library for creating a wide range of charts. But
+                the Highcharts suite consists of several other libraries, each
+                tailored for specific needs. Here is an overview of them and
+                what makes each one unique:
+            </p>
+            <ul>
+                <li>
+                    <strong>Highcharts Core:</strong> The core charting library,
+                    supporting line, bar, column, pie, and many more chart
+                    types, along with many features including those covered in
+                    the previous slides.
+                </li>
+                <li>
+                    <strong>Highcharts Stock:</strong> Extends Highcharts Core
+                    with additional features, especially relating to timeline
+                    navigation and finance.
+                </li>
+                <li>
+                    <strong>Highcharts Maps:</strong> Enables geospatial
+                    visualizations, choropleths, and interactive maps, along
+                    with several map-specific features.
+                </li>
+                <li>
+                    <strong>Highcharts Gantt:</strong> For project planning and
+                    scheduling with tasks, dependencies, and timelines.
+                </li>
+                <li>
+                    <strong>Highcharts Dashboards:</strong> Lets you combine
+                    charts, KPIs, tables, and other components into unified,
+                    interactive dashboards with built-in data synchronization.
+                </li>
+                <li>
+                    <strong>Highcharts Grid:</strong> A spreadsheet-like data
+                    table, available as Grid Lite, which is a free tool that
+                    includes basic grid-related features, and Grid Pro, which
+                    allow for end user editing and has more advanced features.
+                </li>
+            </ul>
+
+            <h3 id="lesson1-2">Lesson 2: Good to Know Before You Start</h3>
+
+            <h4>System Requirements</h4>
+            <p>
+                Highcharts is based on native browser technologies. To ensure
+                that your setup can run Highcharts smoothly, please make sure
+                your browser is compatible as per the requirements:
+
+                <a
+                    href="https://www.highcharts.com/docs/getting-started/system-requirements"
+                    >https://www.highcharts.com/docs/getting-started/system-requirements</a
+                >.
+            </p>
+
+            <h4>Optional Dependencies</h4>
+
+            <p>
+                Although Highcharts is self-contained by default, there are some
+                external third party libraries required to enable certain
+                features. These features are linked to client-side exporting and
+                support for latitude/longitude in Highcharts Maps. For more
+                details, see
+                <a
+                    href="https://www.highcharts.com/docs/getting-started/optional-dependencies"
+                    >https://www.highcharts.com/docs/getting-started/optional-dependencies</a
+                >.
+            </p>
+
+            <h4>Source Available</h4>
+
+            <p>
+                Highcharts is <strong>source available</strong> software, which
+                means you can view and test the source code (like we are doing
+                in this course), but it is not the same as
+                <strong>open source</strong> software. The key distinction is
+                that open source software is generally free to use, even for
+                commercial purposes, while source available software like
+                Highcharts comes with specific restrictions, such as requiring a
+                paid license for commercial use. In the case of Highcharts,
+                there are paid commercial licenses, but also free licenses for
+                personal use and educational purposes. Read more at
+                <a href="https://www.highcharts.com/blog/education/"
+                    >https://www.highcharts.com/blog/education/</a
+                >
+                and
+                <a href="https://shop.highcharts.com/"
+                    >https://shop.highcharts.com/</a
+                >
+            </p>
+
+            <h3 id="lesson1-3">Lesson 3: Knowledge Check</h3>
+            <div class="quiz">
+                <p><strong>Question 1:</strong> What is Highcharts?</p>
+                <p>
+                    A) A plug-and-play end-user software for creating
+                    interactive charts on the web<br />
+                    B) A JavaScript charting library that makes it easy for
+                    developers to create interactive data visualizations in web
+                    projects<br />
+                    C) An excel plugin for creating interactive charts in your
+                    spreadsheets<br />
+                    D) A desktop application for designing charts
+                </p>
+                <div class="answer"><strong>Answer: B</strong></div>
+
+                <p>
+                    <strong>Question 2:</strong> What image format is Highcharts
+                    based on?
+                </p>
+                <p>
+                    A) PNG<br />
+                    B) EPS<br />
+                    C) PDF<br />
+                    D) SVG
+                </p>
+                <div class="answer"><strong>Answer: D</strong></div>
+
+                <p>
+                    <strong>Question 3:</strong> Which of the following is NOT
+                    an accessibility feature in Highcharts?
+                </p>
+                <p>
+                    A) PDF exporting<br />
+                    B) Pattern fills<br />
+                    C) Sonification<br />
+                    D) Screen reader support
+                </p>
+                <div class="answer"><strong>Answer: A</strong></div>
+
+                <p>
+                    <strong>Question 4:</strong> Which of the following
+                    properties is true for Highcharts?
+                </p>
+                <p>
+                    A) Client-side<br />
+                    B) Python-based<br />
+                    C) Backend-dependent<br />
+                    D) Requires Adobe Flash
+                </p>
+                <div class="answer"><strong>Answer: A</strong></div>
+            </div>
+        </div>
+
+        <div>
+            <h2 id="module2">Module 2: Your First Chart</h2>
+
+            <h3 id="lesson2-1">Lesson 1: Creating a Simple Chart</h3>
+            <h4>What you will learn</h4>
+            <ul>
+                <li>
+                    How to use an online code editor to quickly prototype and
+                    test with Highcharts.
+                </li>
+                <li>
+                    How to create a simple chart from scratch using Highcharts,
+                    starting with an empty chart configuration.
+                </li>
+            </ul>
+
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/KPAq0pEDLCM"
+                    frameborder="0"
+                    allowfullscreen
+                >
+                </iframe>
+            </div>
+
+            <figure class="highcharts-figure">
+                <div id="basic-chart"></div>
+                <p class="highcharts-description">
+                    The resulting chart from the basic chart configuration.
+                </p>
+            </figure>
+
+            <h3 id="lesson2-2">Lesson 2: Setting Options</h3>
+
+            <h4>What you will learn</h4>
+            <ul>
+                <li>
+                    How to work with multiple series and set various chart
+                    options
+                </li>
+                <li>How to use modules to extend Highcharts' functionality</li>
+            </ul>
+
+            <h4>Part 1: Adding more Series</h4>
+            <p>
+                In this video, we continue with the chart from the previous
+                lesson, and build on our imaginary scenario to add more series
+                and set additional options.
+            </p>
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/KBu3zkE7ovI"
+                    frameborder="0"
+                    allowfullscreen
+                >
+                </iframe>
+            </div>
+
+            <h4>Part 2: Data Labels and Tooltip</h4>
+            <p>
+                In this video, we add data labels and a change the format of our
+                tooltip.
+            </p>
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/jCNAChfcGQs"
+                    frameborder="0"
+                    allowfullscreen
+                >
+                </iframe>
+            </div>
+
+            <h4>Part 3: Annotation</h4>
+            <p>
+                In this video, we use the annotations module to add a unique
+                label to the highest column of the chart.
+            </p>
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/77e5IAmFsaI"
+                    frameborder="0"
+                    allowfullscreen
+                >
+                </iframe>
+            </div>
+
+            <h4>Part 4: Click Event Handler</h4>
+            <p>
+                In this video, we add a callback function to handle click events
+                on the chart columns.
+            </p>
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/v8H0T1Z_gZ0"
+                    frameborder="0"
+                    allowfullscreen
+                >
+                </iframe>
+            </div>
+
+            <figure class="highcharts-figure">
+                <div id="setting-options-chart"></div>
+                <p id="description"></p>
+                <p class="highcharts-description">
+                    The final version of the chart.
+                </p>
+            </figure>
+
+            <h3 id="lesson2-3">Lesson 4: Knowledge Check</h3>
+            <div class="quiz">
+                <p>
+                    <strong>Question 1:</strong> When should we use the
+                    plotOptions option?
+                </p>
+                <p>
+                    A) When we need to set options that apply to a single point
+                    <br />
+                    B) When we need to change the chart type<br />
+                    C) When we want to set options that apply to multiple
+                    series<br />
+                    D) When we want to set options that apply to a single series
+                </p>
+                <div class="answer"><strong>Answer: C</strong></div>
+
+                <p>
+                    <strong>Question 2:</strong> What is required to add
+                    annotations to Highcharts?
+                </p>
+                <p>
+                    A) Nothing, it's built into core Highcharts<br />
+                    B) Loading the annotations module and configuring the
+                    annotations option<br />
+                    C) Writing custom JavaScript code<br />
+                    D) Using a special chart type
+                </p>
+                <div class="answer"><strong>Answer: B</strong></div>
+
+                <p>
+                    <strong>Question 3:</strong> How can you make chart points
+                    interactive with click events?
+                </p>
+                <p>
+                    A) Using CSS only<br />
+                    B) It's not possible to add click events<br />
+                    C) Using the events option<br />
+                    D) Only through external JavaScript
+                </p>
+                <div class="answer"><strong>Answer: C</strong></div>
+
+                <p>
+                    <strong>Question 4:</strong> What does the stacking option
+                    do in column charts?
+                </p>
+                <p>
+                    A) Makes columns thinner<br />
+                    B) Places columns side by side<br />
+                    C) Removes columns completely<br />
+                    D) Places columns on top of each other
+                </p>
+                <div class="answer"><strong>Answer: D</strong></div>
+            </div>
+        </div>
+
+        <h2 id="wrap-up">Course Wrap-Up</h2>
+
+        <p>
+            Congratulations on completing the
+            <strong>Getting Started wtih Highcharts</strong> course.
+        </p>
+
+        <p>
+            We have covered some key aspects about what Highcharts is, learned
+            how to get a chart up and running, and how to customize it to suit a
+            simple use case.
+        </p>
+
+        <p>During this course you learned how to:</p>
+        <ul>
+            <li>Create a basic chart using Highcharts</li>
+            <li>Add multiple series and categories to represent your data.</li>
+            <li>
+                Use chart options such as plotOptions, stacking, colors, and
+                dataLabels to change presentation and behavior.
+            </li>
+            <li>
+                Include and use the annotations module to add labels to specific
+                points.
+            </li>
+            <li>
+                Customize how the tooltip is formatted and use event handlers to
+                create additional interactivity.
+            </li>
+        </ul>
+
+        <p>
+            These fundamentals give you a good starting point for building
+            interactive, production-ready charts. From here you can explore more
+            topics like responsive rules, accessibility options, and
+            integrations with frameworks (React/Vue/Angular).
+        </p>
+
+        <p>
+            <strong>Note about the accessibility module</strong>: In this
+            course, we did not use the accessibility module when creating our
+            chart, as this was outside the scope of the tutorial videos.
+            However, in a production setup, it is highly recommended to include
+            and enable this module to ensure your charts are accessible to all
+            users. To do this, simply add the accessibility module script tag to
+            your HTML, after the Highcharts JS files. Unless you have a specific
+            reason not to, make sure to include it in your project.
+        </p>
+
+        <p>Further reading and references:</p>
+        <ul>
+            <li>
+                <a
+                    href="https://www.highcharts.com/docs/getting-started/your-first-chart"
+                    target="_blank"
+                    >Highcharts: Your First Chart</a
+                >
+            </li>
+            <li>
+                <a href="https://api.highcharts.com/highcharts/" target="_blank"
+                    >Highcharts API Reference</a
+                >
+            </li>
+            <li>
+                <a
+                    href="https://www.highcharts.com/docs/chart-concepts/series"
+                    target="_blank"
+                    >Series Documentation</a
+                >
+            </li>
+            <li>
+                <a
+                    href="https://www.highcharts.com/docs/advanced-chart-features/annotations-module"
+                    target="_blank"
+                    >Annotations Module Documentation</a
+                >
+            </li>
+            <li>
+                <a
+                    href="https://www.highcharts.com/docs/accessibility/accessibility-module"
+                    target="_blank"
+                    >Accessibility Module Documentation
+                </a>
+            </li>
+        </ul>
+        <hr />
+        <script>
+            Highcharts.chart('basic-chart', {
+                chart: {
+                    type: 'column'
+                },
+
+                legend: {
+                    enabled: false
+                },
+
+                title: {
+                    text: 'Fishing Competition Results'
+                },
+
+                xAxis: {
+                    categories: [
+                        'Joan',
+                        'Charlie',
+                        'Peter',
+                        'Courtney',
+                        'Ken',
+                        'Lily',
+                        'Alex'
+                    ]
+                },
+
+                yAxis: {
+                    title: {
+                        text: 'Fish Amount'
+                    }
+                },
+
+                series: [
+                    {
+                        name: 'Fish Amount',
+                        data: [2, 3, 2, { y: 5, color: 'salmon' }, 4, 0, 1],
+                        color: 'lightseagreen'
+                    }
+                ]
+            });
+        </script>
+        <script>
+            const descriptionElement = document.getElementById('description');
+
+            Highcharts.chart('setting-options-chart', {
+                chart: {
+                    type: 'column',
+                    style: {
+                        fontFamily: 'Winky Sans, sans-serif'
+                    }
+                },
+
+                legend: {
+                    reversed: true
+                },
+
+                title: {
+                    text: 'Fishing Competition Results'
+                },
+
+                xAxis: {
+                    categories: [
+                        'Joan',
+                        'Charlie',
+                        'Peter',
+                        'Courtney',
+                        'Ken',
+                        'Lily',
+                        'Alex'
+                    ]
+                },
+
+                yAxis: {
+                    title: {
+                        text: 'Fish Amount'
+                    }
+                },
+
+                tooltip: {
+                    valueSuffix: ' fish',
+                    footerFormat: 'Total: <b>{point.stackTotal} fish</b>'
+                },
+
+                plotOptions: {
+                    column: {
+                        borderColor: '#000',
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true
+                        },
+                        cursor: 'pointer',
+                        events: {
+                            click: function (e) {
+                                const point = e.point,
+                                    name = point.key,
+                                    day = point.series.name,
+                                    fishAmount = point.y,
+                                    fishTotal = point.stackTotal;
+
+                                descriptionElement.innerText = `${name} caught ${fishAmount} fish on ${day.toLowerCase()} and ${fishTotal} fish in total.`;
+                            }
+                        }
+                    }
+                },
+
+                annotations: [
+                    {
+                        draggable: '',
+                        labels: [
+                            {
+                                point: 'max',
+                                y: -40,
+                                text: 'WINNER'
+                            }
+                        ]
+                    }
+                ],
+
+                series: [
+                    {
+                        name: 'Day 3',
+                        data: [2, 1, 3, 4, { y: 5, id: 'max' }, 6, 6],
+                        color: '#6EDBA0'
+                    },
+                    {
+                        name: 'Day 2',
+                        data: [3, 3, 4, 1, 3, 4, 1],
+                        color: '#DC8C6F'
+                    },
+                    {
+                        name: 'Day 1',
+                        data: [2, 3, 2, 5, 4, 0, 1],
+                        color: '#6ECDDB'
+                    }
+                ]
+            });
+        </script>
+    </body>
+</html>
