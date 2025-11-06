@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction to Highcharts & Accessibility</title>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+  <script src="https://code.highcharts.com/modules/sonification.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      border-bottom: 2px solid #333;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      border-bottom: 1px solid #666;
+      padding-bottom: 8px;
+      margin-top: 40px;
+    }
+
+    h3 {
+      margin-top: 30px;
+    }
+
+    /* Module styling */
+    h2[id^="module"] {
+      background: #E3E3E8;
+      padding: 20px;
+      margin-top: 60px;
+      margin-bottom: 30px;
+      border-left: 5px solid #434348;
+      border-bottom: none;
+    }
+
+    /* Add spacing before each module */
+    h2[id^="module"]::before {
+      content: "";
+      display: block;
+      height: 40px;
+      margin-top: -40px;
+    }
+
+    h3 {
+      margin-top: 30px;
+    }
+
+    /* Lesson styling */
+    h3[id^="lesson"] {
+      background: #F2F1F4;
+      padding: 12px 15px;
+      border-left: 6px solid #999;
+      margin-top: 65px;
+    }
+
+    h3[id^="lesson"].first {
+      margin-top: 25px;
+    }
+
+    .video-script {
+      font-style: italic;
+      color: #555;
+      padding: 15px;
+      border-left: 3px solid #999;
+      margin: 20px 0;
+    }
+
+    .chart-container {
+      margin: 20px 0;
+      min-height: 400px;
+    }
+
+    button {
+      padding: 8px 15px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .quiz {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 30px 0;
+    }
+
+    .answer {
+      background: #f0f0f0;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .toc {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 8px;
+    }
+
+    .toc h2 {
+      margin-top: 0;
+      border: none;
+      padding-bottom: 10px;
+    }
+
+    .toc ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc ul ul {
+      padding-left: 20px;
+      margin-top: 5px;
+    }
+
+    .toc li {
+      margin: 8px 0;
+    }
+
+    .toc a {
+      text-decoration: none;
+      color: #0066cc;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    .highcharts-figure {
+      display: block;
+      border-radius: 8px;
+      padding: 24px 24px 12px 24px;
+      margin: 12px 0;
+      border: 1px solid #ccc;
+      font-weight: bold;
+      color: #18171C;
+      background: #F7F7F8;
+    }
+
+    .highcharts-figure img {
+      width: 100%;
+    }
+
+    .highcharts-description {}
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 1rem;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .sonify {
+      background-color: #fff;
+      border: 1px solid #25386f;
+      color: #25386f;
+      font-size: 0.9rem;
+      min-height: 30px;
+      font-weight: 500;
+      border-radius: 4px;
+      padding: 0.375rem 0;
+      width: 9rem;
+      margin-left: auto;
+      margin-bottom: 0.25rem;
+      margin-top: 0.25rem;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .sonify:hover {
+      background-color: #25386f;
+      color: #fff;
+    }
+
+    .toggle-container {}
+
+    .toggle-container label {
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    .highcharts-data-table table {
+      min-width: 360px;
+      max-width: 820px;
+      margin: 1em auto;
+      font-family: Verdana, sans-serif;
+    }
+
+    .highcharts-data-table table {
+      font-family: Verdana, sans-serif;
+      border-collapse: collapse;
+      border: 1px solid var(--highcharts-neutral-color-10, #e6e6e6);
+      margin: 10px auto;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+      padding: 1em 0;
+      font-size: 1.2em;
+      color: var(--highcharts-neutral-color-60, #666);
+    }
+
+    .highcharts-data-table th {
+      font-weight: 600;
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tbody tr:nth-child(even) {
+      background: var(--highcharts-neutral-color-3, #fff);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Introduction to Highcharts & Accessibility</h1>
+
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+      <li><a href="#course-scope">Course Scope</a></li>
+
+<!--       <li><a href="#why-matters">Why This Course Matters</a></li> -->
+      <li><a href="#module1">Module 1: Introduction to the Highcharts Accessibility Module</a>
+        <ul>
+          <li><a href="#lesson1-1">Lesson 1: What is the Accessibility Module?
+            </a></li>
+          <li><a href="#lesson1-2">Lesson 2: How the accessibility module works</a></li>
+          <li><a href="#lesson1-3">Lesson 3: Let’s make an accessible chart</a></li>
+          <li><a href="#lesson1-4">Lesson 4: Knowledge Check</a></li>
+        </ul>
+      </li>
+      <li><a href="#module2">Module 2: Highcharts Features for Accessibility
+        </a>
+        <ul>
+          <li><a href="#lesson2-1">Lesson 1: High Contrast Themes
+            </a></li>
+          <li><a href="#lesson2-2">Lesson 2: Tools for accessible palettes
+            </a></li>
+          <li><a href="#lesson2-3">Lesson 3: Pattern fills
+            </a></li>
+          <li><a href="#lesson2-4">Lesson 4: Additional accessibility features
+            </a></li>
+          <li><a href="#lesson2-5">Lesson 5: Knowledge Check
+            </a></li>
+
+        </ul>
+      </li>
+      <li><a href="#module3">Module 3: Audio Charts
+        </a>
+        <ul>
+          <li><a href="#lesson3-1">Lesson 1: Intro to the Sonification module</a></li>
+          <li><a href="#lesson3-2">Lesson 2: Let’s make an audio chart</a></li>
+          <li><a href="#lesson3-3">Lesson 3: Configuring sonification settings
+            </a></li>
+          <li><a href="#lesson3-4">Lesson 4: Knowledge Check
+            </a></li>
+        </ul>
+      </li>
+        <li><a href="#wrap-up">Wrap Up</a></li>
+    </ul>
+  </div>
+
+  <div>
+    <h2 id="course-scope">Course Scope</h2>
+
+    <p>This course focuses on the features of Highcharts’ Accessibility and Sonification modules and how they enable you to create accessible data visualizations. </p>
+
+    <h3>What you will learn</h3>
+    <ul>
+      <li>A high-level overview of the Accessibility module's features</li>
+      <li>How the Accessibility module works to make charts accessible to assitive technologies like screen readers.</li>
+      <li>Additional Highcharts features that make charts accessible to people with low-vision and other impairments.</li>
+      <li>How to turn data into sound using the Highcharts Sonification module.</li>
+    </ul>
+
+    <h3>Not covered</h3>
+    <ul>
+      <li>Advanced accessibility configuration options.</li>
+      <li>Advanced sonfication configuration options.</li>
+    </ul>
+
+    <h3>Prerequisites</h3>
+
+    <h4>Required</h4>
+    <ul>
+      <li>Basic knowledge of JavaScript, HTML, and CSS.</li>
+
+    </ul>
+
+    <h4>Recommended</h4>
+    <ul>
+      <li>Some familiarity with accessibility concepts.</li>
+      <li>Some knowledge of the Highcharts API.</li>
+    </ul>
+
+    <h4>Not required</h4>
+    <ul>
+      <li>Advanced programming.</li>
+
+    </ul>
+  </div>
+
+  </div>
+  <hr/>
+  <h2 id="module1">Module 1: The Highcharts Accessibility Module</h2>
+
+  <h3 id="lesson1-1" class="first">Lesson 1: What is the Highcharts Accessibility module?</h3>
+
+  <h4>Why an Accessibility module?</h4>
+  <p>Creating accessible data visualizations is both a technical challenge and a moral imperative. Charts and graphs are central to how people interpret data, but for many users — including those relying on screen readers, voice input, or other assistive technologies — standard web charts can present serious barriers to understanding.</p>
+
+  <p>The Highcharts Accessibility Module helps developers overcome those challenges. It extends the functionality of Highcharts to make charts perceivable, operable, and understandable to all users, regardless of their abilities or the tools they use.</p>
+
+  <p>By including the Accessibility Module in your chart setup, you can:</p>
+  <ul>
+    <li>Enable screen reader and keyboard navigation support.</li>
+    <li>Make charts accessibile for users with low vision.</li>
+    <li>Ensure your visualizations meet the WC3's Web Content Accessibility Guidelines (WCAG.)</li>
+  </ul>
+  <p>Beyond meeting compliance requirements, accessible charts make your data more inclusive and usable for everyone , improving the experience for all audiences, not just those with disabilities.</p>
+
+  <h4>Watch: Highcharts & Accessibility</h4>
+  <p>The short video below provides an inside look at why accessibility in data visualization matters and how the Highcharts team collaborates with industry experts to make it easier for developers to create accessible charts.</p>
+  <p>
+    Watch the video to hear from the creators of the Highcharts Accessibility Module and see how accessibility shapes the future of data visualization.
+  </p>
+
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/7HVH1ph4e24?si=0r70UQ1sDaQnhIEB" frameborder="0"></iframe>
+  </div>
+
+  <h3 id="lesson1-2">Lesson 2: How the Accessibility module works</h3>
+
+  <p>Welcome to lesson 2 of The Highcharts Accessibility Module: How the Accessibility module works</p>
+
+  <h4>What you will learn</h4>
+  <ul>
+    <li>How the module makes charts accessible to screen readers and other assistive technologies.</li>
+    <li>What happens to a basic chart once the module is enabled.</li>
+  </ul>
+
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/LdV8Goqzxec?si=MTn1Ff_SLob6IGDB" frameborder="0"></iframe>
+  </div>
+
+  <figure class="highcharts-figure">
+    <div id="lineChart"></div>
+    <div class="controls">
+      <p class="highcharts-description">Line chart demo</p>
+    </div>
+
+  </figure>
+  
+  <p> <b>Extra:</b> Here's a video that shows a screen reader user navigating an accessible chart.</p>
+   <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/8Sew47xr-EU?si=bFpISFdo2jhBpKew" frameborder="0"></iframe>
+  </div>
+
+  
+ 
+
+  <h3 id="lesson1-3">Lesson 3: Let's make an accessible chart</h3>
+
+  <h4>What you will learn</h4>
+  <ul>
+    <li>How to use the Accessibility module to make a chart accessible to screen readers.</li>
+  </ul>
+
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/Q0jgJwy6_yQ?si=aG1a9oTOG-7a2n4A" frameborder="0"></iframe>
+  </div>
+
+  <figure class="highcharts-figure">
+    <div id="rainfall-chart"></div>
+    <p class="highcharts-description">The final, accessible version of the chart.</p>
+  </figure>
+
+  <h3 id="lesson1-4">Lesson 4: Knowledge Check</h3>
+
+  <div class="quiz">
+    <h3>Module 1 Quiz</h3>
+
+    <p><strong>Question 1:</strong> Why is accessibility important in data visualization?</p>
+    <p>
+      A) It improves SEO for charts<br>
+      B) It ensures charts are usable by everyone, including people relying on assistive technologies<br>
+      C) It adds new animation effects<br>
+      D) It automatically generates chart data
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 2:</strong> What happens when you include the Highcharts Accessibility Module in your chart setup?</p>
+    <p>
+      A) The chart automatically changes color schemes<br>
+      B) The chart becomes interactive for screen readers and assistive tools<br>
+      C) The chart adds extra data series<br>
+      D) Nothing changes unless you add custom CSS
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 3:</strong> Which of the following accessibility features are automatically added when the Accessibility Module is enabled?</p>
+    <p>
+      A) Screen reader regions and ARIA labels<br>
+      B) Audio narration<br>
+      C) 3D rendering<br>
+      D) Automatic dark-mode support
+    </p>
+    <div class="answer"><strong>Answer: A</strong></div>
+
+    <p><strong>Question 4:</strong> How can you make a chart’s information more meaningful for users of assistive technologies?</p>
+    <p>
+      A) Use a generic chart title<br>
+      B) Add descriptive titles, axis labels, and point descriptions<br>
+      C) Remove the legend<br>
+      D) Minimize text to reduce screen reader output
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 5:</strong> Where can additional context for a chart be added to improve accessibility?</p>
+    <p>
+      A) As a tooltip only<br>
+      B) In a &lt;p&gt; element with the class <code>HighchartsDescription</code> below the chart<br>
+      C) In a &lt;div&gt; with display:none<br>
+      D) In the chart’s background image
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+  </div>
+
+  <h2 id="module2">Module 2: Highcharts Features for Accessibility</h2>
+
+  <h3 id="lesson2-1" class="first">Lesson 1: High Contrast Themes</h3>
+  <h4>What you will learn</h4>
+  <ul>
+    <li>What makes a theme high contrast.</li>
+    <li>Why contrast matters for accessibility.</li>
+    <li>WCAG contrast ratio standards.</li>
+  </ul>
+
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/ZtHi4E5eOkY?si=2JOVlbUqmjtVQ5hT" frameborder="0"></iframe>
+  </div>
+
+  <h3 id="lesson2-2">Lesson 2: Tools for accessible palettes</h3>
+  <h4>What you will learn</h4>
+  <ul>
+    <li>How to check color contrast ratios</li>
+    <li>Tools for creating accessible color palettes</li>
+  </ul>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/TXTkiAQ336A?si=T71vDGK0PD81Nk7p" frameborder="0"></iframe>
+  </div>
+
+  <h3 id="lesson2-3">Lesson 3: Pattern fills</h3>
+  <h4>What you will learn</h4>
+  <ul>
+    <li>How to enable Highcharts pattern fill library.</li>
+    <li>How pattern fills make charts more accessible for people with colorblindness.</li>
+    <li>How Highcharts line dash styles make line charts more accessible.</li>
+  </ul>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/tMC8Xk7ebA4?si=Fpmm5FRBPvCQmacR" frameborder="0"></iframe>
+  </div>
+
+  <h3 id="lesson2-4">Lesson 4: Additional accessibility features</h3>
+  <h4>What you will learn</h4>
+  <ul>
+    <li>What is voice input and how to enable it.</li>
+    <li>Highcharts features for cognitive disabilities.</li>
+    <li>How Highcharts supports exporting charts for tactile printing.</li>
+  </ul>
+
+  <h4>Voice Input</h4>
+  <p>The Highcharts Accessibility Module supports voice input software, allowing users to interact with chart controls using voice commands.</p>
+  <p>Here’s a brief demo video of how it works,
+  </p>
+
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/kt-paZYOKA8?si=tp5S2HqLNaLjzVdD" frameborder="0"></iframe>
+  </div>
+
+  <p>
+    As you can see in the demo, voice input works like keyboard navigation, except you’re obviously using your voice instead of typing.</p>
+  <p>
+    To enable voice input support, just include the accessibility module in your HTML file, and users can use compatible voice recognition software, such as Nuance Dragon or Microsoft Windows Speech Recognition, to navigate and control chart features. </p>
+
+  <h4>Cognitive Accessibility</h4>
+  <p>A lot of Highcharts features have been developed with the goal of making it charts easier to use and understand. This translates to a better experience for everyone, but especially for people with cognitive disabilities.</p>
+  <p>
+    What is a cognitive disability? It could be challenges with memory, issues with maintaining focus, difficulty reading or comprehending information, or abstract thinking and analysis – in other words, a lot of the mental tasks users undertake when analyzing data visualizations.</p>
+  <p>
+    In order to alleviate some of these challenges, Highcharts comes with numerous built-in features that are on display in the demo below.</p>
+
+  <figure class="highcharts-figure">
+
+    <div id="cognitive"></div>
+    <div class="controls">
+      <p class="highcharts-description">Line chart demostrating features for cognitive accessibility</p>
+    </div>
+  </figure>
+
+  <p>For example, chart legends and series labels provide a lot of persistent information about the data overall, making it easier to identify the series via consistently used text, color and patterns.</p>
+  <p>
+    When you roll over one of the lines, you’ll see that the other series dim, and and a tooltip appears that gives me information about the specific point, making focusing on individual data points much more manageable for users, regardless of their cognitive abilities.</p>
+  <p>
+    Another helpful feature supporting focus is the ability to view the data as a data table. </p>
+  <p>Click on the context menu icon in the top right corner of the chart and click on the "View data table" option.</p>
+
+  <p>Referring to a straightforward data table alongside the data visualization may make the chart easier to understand for people who find the chart alone confusing.</p>
+
+  <p>ANother option in the context menu drop down is "View in full screen," and this is a great option for users who need extra support focusing as it removes all surrounding distractions, like the browser chrome and other apps.</p>
+
+  <h4>Tactile Export</h4>
+  <p>Highcharts also supports export formats that can be used with embossing printers.</p>
+  <p>
+    Embossing printers, also called Braille embossers, are devices that create a raised-dot, tactile version of digital content, most commonly for blind and visually impaired individuals. They take computer data and emboss it onto heavyweight paper to produce Braille text and tactile graphics like charts or maps, making information accessible through touch.</p>
+
+  <figure class="highcharts-figure">
+
+    <img src="https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2021/02/08185154/braille-chart.jpg" alt="Tactile export image">
+    <div class="controls">
+      <p class="highcharts-description">An example of a chart printed with an embossing printer</p>
+    </div>
+  </figure>
+
+  <p>If you export your Highcharts chart as an SVG vector image, you can print it on an embosser and create a tactile version of your chart, making the data accessible through touch.
+  </p>
+
+  <h3 id="lesson2-5">Lesson 5: Knowledge Check</h3>
+
+  <div class="quiz">
+    <h3>Module 2 Quiz</h3>
+
+    <p><strong>Question 1:</strong> What is the main purpose of Highcharts’ high-contrast themes?</p>
+    <p>
+      A) To add 3D visual effects<br>
+      B) To meet WCAG contrast requirements and improve readability<br>
+      C) To change chart animation speed<br>
+      D) To automatically recolor series by category
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 2:</strong> According to WCAG, what is the minimum recommended contrast ratio for accessible content?</p>
+    <p>
+      A) 2.1 : 1<br>
+      B) 3 : 1<br>
+      C) 4.5 : 1<br>
+      D) 7 : 1
+    </p>
+    <div class="answer"><strong>Answer: C</strong></div>
+
+    <p><strong>Question 3:</strong> Which tool helps you check color contrast ratios and simulate different types of color blindness?</p>
+    <p>
+      A) Highcharts Editor<br>
+      B) WhoCanUse.com<br>
+      C) Chrome DevTools<br>
+      D) Paletton
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 4:</strong> What is the advantage of using pattern fills in your charts?</p>
+    <p>
+      A) They make charts easier to animate<br>
+      B) They help distinguish series when color alone isn’t enough<br>
+      C) They automatically optimize chart performance<br>
+      D) They add gradient shading
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 5:</strong> What type of export format can be used with embossing printers to create tactile charts?</p>
+    <p>
+      A) PNG<br>
+      B) SVG<br>
+      C) PDF<br>
+      D) JPG
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+  </div>
+
+  <h2 id="module3">Module 3: Exploring Audio Charts</h2>
+
+  <h3 id="lesson3-1" class="first">Lesson 1: The Sonification Module</h3>
+
+  <h4>What you will learn</h4>
+  <ul>
+    <li>What sonification is and why it matters.</li>
+    <li>Real-world examples of data represented by sound.</li>
+    <li> An overview of Highcharts Sonification Module features.</li>
+  </ul>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/-vBrRjnzDWI?si=4fpqXzHq-JwvmK8j" frameborder="0"></iframe>
+  </div>
+
+  <h3 id="lesson3-2">Lesson 2: Let's make an audio chart</h3>
+
+  <h4>What you will learn</h4>
+  <ul>
+    <li>How to include the Sonification module.</li>
+    <li>Default settings for the Sonification module.</li>
+    <li>How to control chart playback.</li>
+  </ul>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/hm9Zvm8TVmg?si=sP6bBrY9DCPugAgf" frameborder="0"></iframe>
+  </div>
+
+  <figure class="highcharts-figure">
+
+    <div id="sonify1"></div>
+    <div class="controls">
+      <p class="highcharts-description">Final sonified chart</p>
+
+      <button id="sonifyButton1" class="sonify">Play chart</button>
+    </div>
+
+  </figure>
+
+  <h3 id="lesson3-3">Lesson 3: Configuring sonification settings</h3>
+
+  <h4>What you will learn</h4>
+  <ul>
+    <li>How to set the duration for playback.</li>
+    <li> How to configure how data is played</li>
+    <li> how to build richer audio with tracks.</li>
+  </ul>
+
+  <h4>Setting playback duration</h4>
+  <p>As we saw when you made our first audio chart, many basic audio configuration options are handled for you out of the box, but there are basic tweaks we can make to our configuration that will enhance the chart’s audio experience and give the user more insight into your data.
+    One of these methods is configuring the duration of the audio.
+  </p>
+
+  <p>
+    Here’s a basic demo where we have some sonified points that play in order of their y values, the lowest y values playing first. The playback duration set to "slow" (4 seconds.) Press the "Play Chart" button, and as it plays, you get a pretty good sense of the range of the data. And there’s enough time between notes to comprehend differences between each point.
+  </p>
+
+  <figure class="highcharts-figure">
+
+    <div id="sonify2"></div>
+    <div class="controls">
+      <p class="highcharts-description">Choose playback speed</p>
+      <div class="toggle-container">
+        <label><input type="radio" name="speed" value="slow" checked> Slow</label>
+        <label><input type="radio" name="speed" value="fast"> Fast</label>
+      </div>
+      <button id="sonifyButton2" class="sonify">Play chart</button>
+    </div>
+
+  </figure>
+
+  <p>
+    Now change the playback speed to "fast" using the radio buttons below the chart. Now the chart plays very quickly, and we only get a sense of the lowest and highest notes and not much in between.</p>
+  <p>But one benefit of fast playback is that we're able to more easily hear an overall trend in the data in terms of its high and low points.
+  </p>
+  <p>
+    So by changing the duration of the audio, we changed the focus of the data. At the slower the duration, its easier for the listener to comprehend individual points. At the faster the duration, the sounds communicate more of an overall trend in the data.</p>
+
+  <h4>Configuring playback order</h4>
+  <p>Another configuration option that can enhance the audio presentation of your data is the sonification configuration option called “order.” </p>
+
+  <p>
+    Here’s the chart we sonified in a previous lesson, and when you click "Play chart", each series plays one after the other, or sequentially, and this is the default setting for the sonification order setting. Ordering your playback sequentially is a great way to enable the user to focus on one series at a time.
+  </p>
+
+  <figure class="highcharts-figure">
+
+    <div id="sonify3"></div>
+    <div class="controls">
+      <p class="highcharts-description">Choose playback order</p>
+      <div class="toggle-container">
+        <label><input type="radio" name="order" value="sequential" checked> Sequential (deafult)</label>
+        <label><input type="radio" name="order" value="simultaneous"> Simultaneous</label>
+      </div>
+      <button id="sonifyButton3" class="sonify">Play chart</button>
+    </div>
+  </figure>
+
+  But if you look at the series, notice that the purple series ends at 3 on the x axis. Playing the series sequentially, I may not pick up on that fact because I’m focused on each individual series rather than the chart as a whole.</p>
+  <p>
+    Use the radio buttons below the chart to change the play order setting to simultaneous, and play the chart again. Notice that it's much more obvious that the second series drops off about halfway through the chart playback as compared to the first, and this intriguing detail makes me want to investigate the data more to find out why that happens. And this is one example of how simultaneous playback can surface insights in your data.</p>
+
+  <h4>Conditional audio tracks</h4>
+  <p>One of the most effective ways to enhance the audio presentation of your data is to use different sounds at different times for different reasons.</p>
+
+  <p>
+    For example, in this demo that shows monthly average temperatures in Helsinki, there's a visual demarcation for the summer months, mid April through mid September, represented by the green plot area labeled Summer.
+  </p>
+
+  <figure class="highcharts-figure">
+
+    <div id="sonify4"></div>
+    <div class="controls">
+      <p class="highcharts-description">Audio chart with conditional tracks</p>
+      
+      <button id="sonifyButton4" class="sonify">Play chart</button>
+    </div>
+  </figure>
+
+  <p>
+    Play the chart, and you'll notice that when the playback enters those summer months, you hear a soft shaker sound indicating that playback has entered the green plot area.</p>
+  <p>
+    Also notice the plot line at zero degrees celsius and the constant tone that plays to give the user context about how far above or below each data point is from zero.
+  <p>
+
+  <p>All of this sound layering is accomplished through track configuration.</p>
+
+  <p>There are two types of tracks, and both can be configured globally for the entire chart or at the series level, and they can either be configured as instruments or speech.</p>
+  <p>
+    The first type of tracks are just called “tracks” and these are used for sonifying your series data.</p>
+  <p>The second type of tracks are called context tracks. These tracks are not dependent on series data and can be configured to play when certain conditions are met to provide context as the chart plays, such as the constant tone indicating zero and the soft shaker sound of the summer months in the demo above.</p>
+
+  <h3 id="lesson3-4">Lesson 4: Knowledge Check</h3>
+
+  <div class="quiz">
+    <h3>Module 3 Quiz</h3>
+
+    <p><strong>Question 1:</strong> What is sonification?</p>
+    <p>
+      A) The process of animating data visually<br>
+      B) Conveying data and information through non-speech audio<br>
+      C) The conversion of text into spoken narration<br>
+      D) A method of exporting charts as audio files
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 2:</strong> In the Highcharts Sonification Module, what does the <code>duration</code> setting control?</p>
+    <p>
+      A) How long each tooltip remains visible<br>
+      B) The overall playback time of the chart’s audio<br>
+      C) The delay between each data point’s tooltip<br>
+      D) The transition speed of chart animations
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 3:</strong> How does the <code>order</code> option affect playback in the Sonification Module?</p>
+    <p>
+      A) It changes the order of data points in the chart<br>
+      B) It determines whether each series plays sequentially or simultaneously<br>
+      C) It adjusts the pitch of the audio for each series<br>
+      D) It enables users to reorder chart elements
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 4:</strong> What are “context tracks” used for in the Sonification Module?</p>
+    <p>
+      A) To display extra chart data visually<br>
+      B) To play sounds or cues that give additional context about the chart while it plays<br>
+      C) To control background music during playback<br>
+      D) To speed up or slow down the main audio track
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+
+    <p><strong>Question 5:</strong> Why might you adjust the overall duration of a sonified chart?</p>
+    <p>
+      A) To sync the audio with external sound effects<br>
+      B) To emphasize trends with faster playback or highlight detail with slower playback<br>
+      C) To make the chart accessible to colorblind users<br>
+      D) To adjust the chart’s export quality
+    </p>
+    <div class="answer"><strong>Answer: B</strong></div>
+  </div>
+
+<h2 id="wrap-up">Course Wrap-Up</h2>
+
+<p>Congratulations! You’ve completed the <strong>Introduction to Highcharts & Accessibility Course!</strong></p>
+
+<p>By now, you should have a solid understanding of how Highcharts helps developers create inclusive, accessible and audible data visualizations for all users.</p>
+
+<p>Throughout the course, you’ve learned how to:</p>
+<ul>
+  <li>Enable and configure the Highcharts Accessibility Module to support screen readers and keyboard navigation.</li>
+  <li>Apply Highcharts’ built-in accessibility features like high-contrast themes, accessible color palettes, and pattern fills.</li>
+  <li>Explore advanced accessibility options including voice input, cognitive support, and tactile export.</li>
+  <li>Use the Sonification Module to turn charts into sound, configure playback, and create meaningful multi-track audio charts.</li>
+</ul>
+
+<p>Accessibility is an ongoing process, not just a checklist. As you continue to build charts, remember that improving accessibility improves the experience for <em>all</em> users.</p>
+
+<p>To dive deeper into specific topics, visit the following resources:</p>
+<ul>
+
+    <li><a href="https://www.highcharts.com/docs/accessibility/accessibility-module" target="_blank">Highcharts Accessibility Module Documentation</a></li>
+  <li><a href="https://www.highcharts.com/docs/sonification/getting-started" target="_blank">Highcharts SonificationModule Documentation</a></li>
+   <li><a href="https://www.highcharts.com/demo#highcharts-demo-accessibility" target="_blank">Highcharts Accessibility Demos</a></li>
+       <li><a href="https://www.highcharts.com/demo#highcharts-demo-audio-charts" target="_blank">Highcharts Audio Chart Demos</a></li>
+    <li><a href="https://www.highcharts.com/accessibility/" target="_blank">Highcharts Accessibility Portal</a></li>
+</ul>
+
+
+
+  <hr>
+
+  <script>
+    const rainfallChart = Highcharts.chart('rainfall-chart', {
+      accessibility: {
+        point: {
+          descriptionFormat: '{series.name} for {category} {point.y} inches'
+        }
+      },
+      title: {
+        text: 'Monthly Precipitation at Central Park, NYC - 2024'
+      },
+      xAxis: {
+        categories: [
+          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ],
+        accessibility: {
+          rangeDescription: 'January to December, 2024',
+          description: 'months'
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Inches'
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      series: [{
+        name: 'Rainfall',
+        data: [
+          5.28,
+          2.05,
+          9.06,
+          3.47,
+          4.11,
+          1.71,
+          4.20,
+          7.02,
+          1.58,
+          0.01,
+          3.35,
+          4.53
+        ]
+      }]
+    });
+
+    function cognitiveChart() {
+      const colors = Highcharts.getOptions().colors;
+      Highcharts.chart('cognitive', {
+        chart: {
+          type: 'spline'
+        },
+        legend: {
+          symbolWidth: 40
+        },
+        credits: {
+          enabled: false
+        },
+        title: {
+          text: 'Most common desktop screen readers'
+        },
+        subtitle: {
+          text: 'Source: WebAIM. Click on points to visit official screen ' +
+            'reader website'
+        },
+        yAxis: {
+          title: {
+            text: 'Percentage usage'
+          },
+          accessibility: {
+            description: 'Percentage usage'
+          }
+        },
+        xAxis: {
+          title: {
+            text: 'Time'
+          },
+          accessibility: {
+            description: 'Time from December 2010 to September 2019'
+          },
+          categories: [
+            'December 2010', 'May 2012', 'January 2014', 'July 2015',
+            'October 2017', 'September 2019'
+          ]
+        },
+        tooltip: {
+          valueSuffix: '%',
+          stickOnContact: true
+        },
+        plotOptions: {
+          series: {
+            point: {
+              events: {
+                click: function() {
+                  window.location.href = this.series.options.website;
+                }
+              }
+            },
+            cursor: 'pointer'
+          }
+        },
+        series: [{
+          name: 'NVDA',
+          data: [34.8, 43.0, 51.2, 41.4, 64.9, 72.4],
+          website: 'https://www.nvaccess.org',
+          color: colors[2],
+          accessibility: {
+            description: 'This is the most used screen reader in 2019.'
+          }
+        }, {
+          name: 'JAWS',
+          data: [69.6, 63.7, 63.9, 43.7, 66.0, 61.7],
+          website: 'https://www.freedomscientific.com/Products/Blindness/JAWS',
+          dashStyle: 'ShortDashDot',
+          color: colors[0]
+        }, {
+          name: 'VoiceOver',
+          data: [20.2, 30.7, 36.8, 30.9, 39.6, 47.1],
+          website: 'http://www.apple.com/accessibility/osx/voiceover',
+          dashStyle: 'ShortDot',
+          color: colors[1]
+        }, {
+          name: 'Narrator',
+          data: [null, null, null, null, 21.4, 30.3],
+          website: 'https://support.microsoft.com/en-us/help/22798/windows-10-complete-guide-to-narrator',
+          dashStyle: 'Dash',
+          color: colors[9]
+        }, {
+          name: 'ZoomText/Fusion',
+          data: [6.1, 6.8, 5.3, 27.5, 6.0, 5.5],
+          website: 'http://www.zoomtext.com/products/zoomtext-magnifierreader',
+          dashStyle: 'ShortDot',
+          color: colors[5]
+        }, {
+          name: 'Other',
+          data: [42.6, 51.5, 54.2, 45.8, 20.2, 15.4],
+          website: 'http://www.disabled-world.com/assistivedevices/computer/screen-readers.php',
+          dashStyle: 'ShortDash',
+          color: colors[3]
+        }],
+        responsive: {
+          rules: [{
+            condition: {
+              maxWidth: 550
+            },
+            chartOptions: {
+              chart: {
+                spacingLeft: 3,
+                spacingRight: 3
+              },
+              legend: {
+                itemWidth: 150
+              },
+              xAxis: {
+                categories: [
+                  'Dec. 2010', 'May 2012', 'Jan. 2014', 'July 2015',
+                  'Oct. 2017', 'Sep. 2019'
+                ],
+                title: ''
+              },
+              yAxis: {
+                visible: false
+              }
+            }
+          }]
+        }
+      });
+    }
+    const lineChart = Highcharts.chart('lineChart', {
+      title: {
+        text: 'U.S Solar Employment Growth',
+        align: 'left'
+      },
+      subtitle: {
+        text: 'By Job Category. Source: <a href="https://irecusa.org/programs/solar-jobs-census/" target="_blank">IREC</a>.',
+        align: 'left'
+      },
+      yAxis: {
+        title: {
+          text: 'Number of Employees'
+        }
+      },
+      xAxis: {
+        accessibility: {
+          rangeDescription: 'Range: 2010 to 2022'
+        }
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+      },
+      plotOptions: {
+        series: {
+          label: {
+            connectorAllowed: false
+          },
+          pointStart: 2010
+        }
+      },
+      series: [{
+        name: 'Installation & Developers',
+        data: [
+          43934, 48656, 65165, 81827, 112143, 142383,
+          171533, 165174, 155157, 161454, 154610, 168960, 171558
+        ]
+      }, {
+        name: 'Manufacturing',
+        data: [
+          24916, 37941, 29742, 29851, 32490, 30282,
+          38121, 36885, 33726, 34243, 31050, 33099, 33473
+        ]
+      }, {
+        name: 'Sales & Distribution',
+        data: [
+          11744, 30000, 16005, 19771, 20185, 24377,
+          32147, 30912, 29243, 29213, 25663, 28978, 30618
+        ]
+      }, {
+        name: 'Operations & Maintenance',
+        data: [
+          null, null, null, null, null, null, null,
+          null, 11164, 11218, 10077, 12530, 16585
+        ]
+      }, {
+        name: 'Other',
+        data: [
+          21908, 5548, 8105, 11248, 8989, 11816, 18274,
+          17300, 13053, 11906, 10073, 11471, 11648
+        ]
+      }],
+      responsive: {
+        rules: [{
+          condition: {
+            maxWidth: 500
+          },
+          chartOptions: {
+            legend: {
+              layout: 'horizontal',
+              align: 'center',
+              verticalAlign: 'bottom'
+            }
+          }
+        }]
+      }
+    });
+
+    function sonify1() {
+      const chart = Highcharts.chart('sonify1', {
+        title: {
+          text: 'Chart sonified in sequence',
+          align: 'left',
+        },
+        series: [{
+          data: [4, 5, 6, 5, 7, 9, 11, 13]
+        }, {
+          data: [1, 3, 4, 2]
+        }]
+      });
+      document.getElementById('sonifyButton1').onclick = function() {
+        chart.toggleSonify();
+      };
+    }
+
+    function sonify2() {
+      const chart = Highcharts.chart('sonify2', {
+        title: {
+          text: 'Time mapping',
+          align: 'left',
+          margin: 25
+        },
+        subtitle: {
+          text: 'Points are played from bottom of y-axis and up',
+          align: 'left'
+        },
+        chart: {
+          type: 'scatter'
+        },
+        sonification: {
+          duration: 4000,
+          defaultInstrumentOptions: {
+            mapping: {
+              time: 'y' // Time is mapped to Y values
+            }
+          }
+        },
+        legend: {
+          enabled: false
+        },
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '{point.x},{point.y}'
+        },
+        series: [{
+          data: [
+            [16, -5],
+            [7, -4],
+            [19, -3],
+            [3, -2],
+            [21, -1],
+            [-2, 0],
+            [7, 1],
+            [-3, 2],
+            [16, 3],
+            [17, 4],
+            [11, 5],
+            [-1, 6]
+          ],
+          color: 'rgba(30, 30, 200, 0.7)',
+          marker: {
+            radius: 5
+          }
+        }]
+      });
+      document.getElementById('sonifyButton2').onclick = function() {
+        chart.toggleSonify();
+      };
+      // Toggle between Fast (1s) and Slow (4s)
+      document.querySelectorAll('input[name="speed"]').forEach(radio => {
+        radio.addEventListener('change', e => {
+          const speed = e.target.value;
+          const duration = (speed === 'fast') ? 1000 : 4000;
+          chart.update({
+            sonification: {
+              duration: duration
+            }
+          });
+        });
+      });
+    }
+
+    function sonify3() {
+      const chart = Highcharts.chart('sonify3', {
+        title: {
+          text: 'Chart playback order',
+          align: 'left',
+          margin: 25
+        },
+        legend: {
+          enabled: false
+        },
+        sonification: {
+          order: 'sequential', // This is the default
+          duration: 3000
+        },
+        accessibility: {
+          landmarkVerbosity: 'one'
+        },
+        series: [{
+          data: [4, 5, 6, 5, 7, 9, 11, 13]
+        }, {
+          data: [1, 3, 4, 2]
+        }]
+      });
+      document.getElementById('sonifyButton3').onclick = function() {
+        chart.toggleSonify();
+      };
+      document.querySelectorAll('input[name="order"]').forEach(radio => {
+        radio.addEventListener('change', e => {
+          const order = e.target.value;
+          chart.update({
+            sonification: {
+              order: order
+            }
+          });
+        });
+      });
+    }
+
+    function sonify4() {
+      const chart = Highcharts.chart('sonify4', {
+        title: {
+          text: 'Helsinki Average Monthly Temperature',
+          align: 'left',
+          margin: 25
+        },
+        sonification: {
+          duration: 8000,
+          defaultInstrumentOptions: {
+            mapping: {
+              pitch: {
+                min: 'c3',
+                max: 'd6'
+              }
+            }
+          },
+          globalContextTracks: [{
+            // A repeated piano note for the 0 plot line
+            instrument: 'piano',
+            valueInterval: 1 / 3, // Play 3 times for every X-value
+            mapping: {
+              pitch: {
+                mapTo: 'y',
+                value: 0 // Map to a fixed Y value
+              },
+              volume: 0.1
+            }
+          }, {
+            // Percussion sound indicates the plot band
+            instrument: 'shaker',
+            activeWhen: {
+              valueProp: 'x', // Active when X is between these values.
+              min: 4,
+              max: 9
+            },
+            timeInterval: 100, // Play every 100 milliseconds
+            mapping: {
+              volume: 0.1
+            }
+          }, {
+            // Speak the plot band label
+            type: 'speech',
+            valueInterval: 1,
+            activeWhen: {
+              crossingUp: 4 // Active when crossing over x = 4
+            },
+            mapping: {
+              text: 'Summer',
+              rate: 2.5,
+              volume: 0.3
+            }
+          }]
+        },
+        yAxis: {
+          plotLines: [{
+            value: 0,
+            color: '#59D',
+            dashStyle: 'shortDash',
+            width: 2
+          }],
+          title: {
+            enabled: false
+          },
+          labels: {
+            format: '{text}°C'
+          },
+          gridLineWidth: 0
+        },
+        xAxis: {
+          plotBands: [{
+            from: 3.5,
+            to: 8.5,
+            color: '#00ff8833',
+            label: {
+              text: 'Summer',
+              align: 'left',
+              x: 10
+            }
+          }],
+          plotLines: [{
+            value: 3.5,
+            color: '#4EA291',
+            width: 3
+          }, {
+            value: 8.5,
+            color: '#4EA291',
+            width: 3
+          }],
+          crosshair: true,
+          categories: [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
+            'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
+          ]
+        },
+        legend: {
+          enabled: false
+        },
+        tooltip: {
+          valueSuffix: '°C'
+        },
+        series: [{
+          name: 'Helsinki',
+          data: [-5, -6, -2, 4, 10, 14, 17, 15, 10, 6, 0, -4],
+          color: 'var(--highcharts-neutral-color-80, #334eff)'
+        }]
+      });
+      document.getElementById('sonifyButton4').onclick = function() {
+        chart.toggleSonify();
+      };
+    }
+    cognitiveChart();
+    sonify1();
+    sonify2();
+    sonify3();
+    sonify4();
+  </script>
+</body>
+
+</html>

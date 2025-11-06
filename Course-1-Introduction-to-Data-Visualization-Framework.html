@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course 1: Introduction to Data Visualization Framework</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 20px;
+          color: #333;
+        }
+    
+        h1 {
+          border-bottom: 2px solid #333;
+          padding-bottom: 10px;
+        }
+    
+        h2 {
+          border-bottom: 1px solid #666;
+          padding-bottom: 8px;
+          margin-top: 40px;
+        }
+    
+        h3 {
+          margin-top: 30px;
+        }
+    
+        /* Module styling */
+        h2[id^="module"] {
+          background: #E3E3E8;
+          padding: 20px;
+          margin-top: 60px;
+          margin-bottom: 30px;
+          border-left: 5px solid #434348;
+          border-bottom: none;
+        }
+    
+        /* Add spacing before each module */
+        h2[id^="module"]::before {
+          content: "";
+          display: block;
+          height: 40px;
+          margin-top: -40px;
+        }
+    
+        h3 {
+          margin-top: 30px;
+        }
+    
+        /* Lesson styling */
+        h3[id^="lesson"] {
+          background: #F2F1F4;
+          padding: 12px 15px;
+          border-left: 6px solid #999;
+          margin-top: 65px;
+        }
+    
+        h3[id^="lesson"].first {
+          margin-top: 25px;
+        }
+    
+        .video-script {
+          font-style: italic;
+          color: #555;
+          padding: 15px;
+          border-left: 3px solid #999;
+          margin: 20px 0;
+        }
+    
+        .chart-container {
+          margin: 20px 0;
+          min-height: 400px;
+        }
+    
+        button {
+          padding: 8px 15px;
+          margin: 5px;
+          cursor: pointer;
+        }
+    
+        .quiz {
+          border: 1px solid #ccc;
+          padding: 15px;
+          margin: 30px 0;
+        }
+    
+        .answer {
+          background: #f0f0f0;
+          padding: 10px;
+          margin: 10px 0;
+        }
+    
+        .video-container {
+          position: relative;
+          padding-bottom: 56.25%;
+          /* 16:9 aspect ratio */
+          height: 0;
+          overflow: hidden;
+        }
+    
+        .video-container iframe {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+    
+        .toc {
+          border: 1px solid #ddd;
+          padding: 20px;
+          margin: 30px 0;
+          border-radius: 8px;
+        }
+    
+        .toc h2 {
+          margin-top: 0;
+          border: none;
+          padding-bottom: 10px;
+        }
+    
+        .toc ul {
+          list-style: none;
+          padding-left: 0;
+        }
+    
+        .toc ul ul {
+          padding-left: 20px;
+          margin-top: 5px;
+        }
+    
+        .toc li {
+          margin: 8px 0;
+        }
+    
+        .toc a {
+          text-decoration: none;
+          color: #0066cc;
+        }
+    
+        .toc a:hover {
+          text-decoration: underline;
+        }
+    
+        .highcharts-figure {
+          display: block;
+          border-radius: 8px;
+          padding: 24px 24px 12px 24px;
+          margin: 12px 0;
+          border: 1px solid #ccc;
+          font-weight: bold;
+          color: #18171C;
+          background: #F7F7F8;
+        }
+    
+        .highcharts-figure img {
+          width: 100%;
+        }
+    
+        .highcharts-description {}
+    
+        .controls {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          margin-top: 1rem;
+          width: 100%;
+          justify-content: space-between;
+        }
+    
+        .sonify {
+          background-color: #fff;
+          border: 1px solid #25386f;
+          color: #25386f;
+          font-size: 0.9rem;
+          min-height: 30px;
+          font-weight: 500;
+          border-radius: 4px;
+          padding: 0.375rem 0;
+          width: 9rem;
+          margin-left: auto;
+          margin-bottom: 0.25rem;
+          margin-top: 0.25rem;
+          text-align: center;
+          cursor: pointer;
+        }
+    
+        .sonify:hover {
+          background-color: #25386f;
+          color: #fff;
+        }
+    
+        .toggle-container {}
+    
+        .toggle-container label {
+          font-weight: 500;
+          cursor: pointer;
+        }
+    
+        input[type="radio"] {
+          margin-right: 5px;
+          cursor: pointer;
+        }
+    
+        .highcharts-data-table table {
+          min-width: 360px;
+          max-width: 820px;
+          margin: 1em auto;
+          font-family: Verdana, sans-serif;
+        }
+    
+        .highcharts-data-table table {
+          font-family: Verdana, sans-serif;
+          border-collapse: collapse;
+          border: 1px solid var(--highcharts-neutral-color-10, #e6e6e6);
+          margin: 10px auto;
+          text-align: center;
+          width: 100%;
+          max-width: 500px;
+        }
+    
+        .highcharts-data-table caption {
+          padding: 1em 0;
+          font-size: 1.2em;
+          color: var(--highcharts-neutral-color-60, #666);
+        }
+    
+        .highcharts-data-table th {
+          font-weight: 600;
+          padding: 0.5em;
+        }
+    
+        .highcharts-data-table td,
+        .highcharts-data-table th,
+        .highcharts-data-table caption {
+          padding: 0.5em;
+        }
+    
+        .highcharts-data-table thead tr,
+        .highcharts-data-table tbody tr:nth-child(even) {
+          background: var(--highcharts-neutral-color-3, #fff);
+        }
+      </style>
+</head>
+<body>
+    <h1>Course 1: Introduction to Data Visualization Framework</h1>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#course-scope">Course Scope</a></li>
+            <li><a href="#module1">Module 1: Why This Course Matters</a></li>
+            <ul>
+            <li><a href="#lesson1-1">Lesson 1:  From Chart Maker to Data Communicator</a></li></ul>
+            <li><a href="#module2">Module 2: The Data Viz Framework</a>
+                <ul>
+                    <li><a href="#lesson2-1">Lesson 1: What is the Framework?</a></li>
+                    <li><a href="#lesson2-2">Lesson 2: Context - What problem are you solving?</a></li>
+                    <li><a href="#lesson2-3">Lesson 3: Audience - Who needs this?</a></li>
+                    <li><a href="#lesson2-4">Lesson 4: Data - What type do you have?</a></li>
+                    <li><a href="#lesson2-5">Lesson 5: From Framework to Charts</a></li>
+                    <li><a href="#lesson2-6">Lesson 6: Knowledge Check</a></li>
+                </ul>
+            </li>
+            <li><a href="#module3">Module 3: Introducing Chart Chooser</a>
+                <ul>
+                    <li><a href="#lesson3-1">Lesson 1: What is Chart Chooser?</a></li>
+                    <li><a href="#lesson3-2">Lesson 2: How Chart Chooser Implements the Framework</a></li>
+                    <li><a href="#lesson3-3">Lesson 3: Knowledge Check</a></li>
+                </ul>
+            </li>
+            <li><a href="#module4">Module 4: Design Basics</a>
+                <ul>
+                    <li><a href="#lesson4-1">Lesson 1: Cognitive Load Basics</a></li>
+                    <li><a href="#lesson4-2">Lesson 2: Accessibility Basics</a></li>
+                    <li><a href="#lesson4-3">Lesson 3: Knowledge Check</a></li>
+                </ul>
+            </li>
+            <li><a href="#wrap-up">Wrap Up</a></li>
+        </ul>
+    </div>
+  
+  
+  <div>
+     <h2 id="course-scope">Course Scope</h2>
+    
+    <p>This course focuses on how to create effective data visualizations using Highcharts Chart Chooser and a data visualization framework.</p>
+    
+    <h3>What you will learn</h3>
+    <ul>
+        <li>Apply a data visualization framework based on context, audience, and data type to create compelling charts.</li>
+        <li>Apply basic design principles for data visualization.</li>
+        <li>Use Highcharts Chart Chooser to select appropriate chart types.</li>
+    </ul>
+    
+    <h3>Not covered</h3>
+    <ul>
+        <li>Data cleaning.</li>
+        <li>Advanced Highcharts coding.</li>
+        <li>Statistical analysis.</li>
+    </ul>
+    
+    <h3>Prerequisites</h3>
+    
+    <h4>Required</h4>
+    <ul>
+        <li>Basic knowledge of JavaScript, HTML, and CSS.</li>
+        <li>Familiarity with common chart types (bar, line, pie).</li>
+        <li>Understanding of basic business metrics.</li>
+    </ul>
+    
+    <h4>Recommended</h4>
+    <ul>
+        <li>Experience working with data in spreadsheets.</li>
+    </ul>
+    
+    <h4>Not required</h4>
+    <ul>
+        <li>Advanced programming.</li>
+        <li>Prior Highcharts experience.</li>
+        <li>Statistics background.</li>
+    </ul>
+  </div> 
+  
+  <hr/>
+    <h2 id="module1">Module 1: Why This Course Matters</h2>
+    <h3 id="lesson1-1">Lesson 1: From Chart Maker to Data Communicator</h3>
+      <div class="video-container">
+  <iframe src="https://www.youtube.com/embed/EHwTfa31O90" 
+          frameborder="0" 
+          allowfullscreen>
+  </iframe>
+</div>
+
+
+    <h2 id="module2">Module 2: The Data Viz Framework</h2>
+
+    <h3 id="lesson2-1">Lesson 1: What is the Framework?</h3>
+    
+  
+  
+
+       <div class="video-container">
+  <iframe src="https://www.youtube.com/embed/N7dLSu0ZxCM" 
+          frameborder="0" 
+          allowfullscreen>
+  </iframe>
+</div>
+    <h3 id="lesson2-2">Lesson 2: Context - What problem are you solving?</h3>
+    
+   
+    <p>Context is the "why" behind your chart. Why are you creating this visualization? What decision needs to be made?</p>
+    
+    <p>Most people skip this question. They go straight from "I have data" to "I'll make a chart." But if you don't know what problem you're solving, you can't know if your chart is effective.</p>
+    
+    <h4>Examples of context</h4>
+    
+    <p><strong>1. Strategic Context</strong></p>
+    <ul>
+        <li>Big decisions with long-term impact</li>
+        <li>Usually annual or quarterly</li>
+        <li>Executive audience</li>
+        <li>Example: Which product should we invest in next year?</li>
+    </ul>
+    
+    <p><strong>2. Operational Context</strong></p>
+    <ul>
+        <li>Day-to-day decisions</li>
+        <li>Daily or weekly checks</li>
+        <li>Operations teams</li>
+        <li>Example: Are we on track to hit this month's targets?</li>
+    </ul>
+    
+    <p><strong>3. Analytical Context</strong></p>
+    <ul>
+        <li>Exploring and investigating</li>
+        <li>Looking for patterns</li>
+        <li>Data analysts</li>
+        <li>Example: What patterns exist in our sales data?</li>
+    </ul>
+    
+    <p><strong>Interactive Demo:</strong> Same data visualized differently based on context.</p>
+    
+    <div>
+        <button onclick="showStrategic()">Strategic Context</button>
+        <button onclick="showOperational()">Operational Context</button>
+        <button onclick="showAnalytical()">Analytical Context</button>
+    </div>
+    
+    <div id="context-chart" class="chart-container"></div>
+    
+    <h4>How to identify your context</h4>
+ <ul>   <li>
+    <p><strong>Is it a big-picture, long-term call?</strong></p>
+    <p>
+Then you are working in a strategic context, so keep things simple, straightforward, and focused on the decision itself.
+    </p></li>
+    <li>
+          <p><strong>Are you checking whether things are on track day-to-day?</strong></p>
+    <p>
+That is an operational context; in this case, focus on highlighting trends, targets, and recent data.
+    </p></li>
+<li>
+    <p><strong>Are you digging into patterns or exploring the data for insights?</strong></p>
+    <p>
+Then it is an analytical context, so go deeper with detail, comparisons, and multiple dimensions.
+    </p></li>
+      </ul>
+
+
+    <h3 id="lesson2-3">Lesson 3: Audience - Who needs this?</h3>
+    
+    <p>You can have the perfect chart for your context, but if your audience can't understand it, you've failed.</p>
+    
+    <p>Different people need different things. A chart that works for a technical team might confuse an executive. A chart that works for an executive might frustrate an analyst who needs details.</p>
+    
+    <h4>Examples of audience</h4>
+    
+    <p><strong>1. Executives</strong></p>
+    <ul>
+        <li>Very busy</li>
+        <li>Need to make decisions (What should I do?)</li>
+        <li>Want the big picture (not details)</li>
+    </ul>
+    
+    <p><strong>2. Technical Teams</strong></p>
+    <ul>
+        <li>Want details (How does this work?)</li>
+        <li>Care about accuracy (Show me the data)</li>
+        <li>Comfortable with complexity (Can handle multiple things at once)</li>
+    </ul>
+    
+    <p><strong>3. General Audiences</strong></p>
+    <ul>
+        <li>Mixed knowledge (some experts, some beginners)</li>
+        <li>Different goals (some decide, some learn, some just check)</li>
+    </ul>
+    
+    <p><strong>Interactive Demo:</strong> Same data optimized for different audiences.</p>
+    
+    <div>
+        <button onclick="showExecutive()">Executive Audience</button>
+        <button onclick="showTechnical()">Technical Audience</button>
+        <button onclick="showGeneral()">General Audience</button>
+    </div>
+    
+    <div id="audience-chart" class="chart-container"></div>
+
+    <h3 id="lesson2-4">Lesson 4: Data - What type do you have?</h3>
+    
+    
+    <p>Context tells you what to show. Audience tells you how to show it. But data tells you what's even possible.</p>
+    
+    <p>Not all charts work with all data. You can't make a line chart from categories. You can't make a pie chart from time series data. Understanding your data type is fundamental.</p>
+    
+    <h4>Two Data Types</h4>
+    
+    <p><strong>1. Categorical Data</strong></p>
+    <p>Examples:</p>
+    <ul>
+        <li>Products: Product A, Product B, Product C</li>
+        <li>Regions: North, South, East, West</li>
+        <li>Departments: Sales, Marketing, Engineering</li>
+    </ul>
+    <p>Examples of suitable charts: Column, Bar, Pie</p>
+    
+    <p><strong>2. Continuous Data</strong></p>
+    <p>Examples:</p>
+    <ul>
+        <li>Time: January, February, March...</li>
+        <li>Temperature: 15°C, 20°C, 25°C</li>
+        <li>Money: $45,230, $52,180...</li>
+    </ul>
+    <p>Examples of suitable charts: Line, Area, Scatter</p>
+    
+    <p><strong>Interactive Demo:</strong> Use the right chart with the right data type</p>
+    
+    <div>
+        <button onclick="showCategorical()">Categorical Data</button>
+        <button onclick="showContinuous()">Continuous Data</button>
+    </div>
+    
+    <div id="data-chart" class="chart-container"></div>
+
+    <h3 id="lesson2-5">Lesson 5: From Framework to Charts</h3>
+  
+  
+  <div class="video-container">
+  <iframe src="https://www.youtube.com/embed/A-w60hu0wOA" 
+          frameborder="0" 
+          allowfullscreen>
+  </iframe>
+</div>
+  
+    <h3 id="lesson2-6">Lesson 6: Knowledge Check</h3>
+
+    <div class="quiz">
+        <h3>Module 2 Quiz</h3>
+        
+        <p><strong>Question 1:</strong> What are the three elements of the data visualization framework?</p>
+        <p>A) Chart, Color, Layout<br>
+        B) Context, Audience, Data<br>
+        C) Title, Legend, Axis<br>
+        D) Strategic, Operational, Analytical</p>
+        <div class="answer"><strong>Answer: B</strong></div>
+        
+        <p><strong>Question 2:</strong> Which element answers "What problem am I solving?"</p>
+        <p>A) Audience<br>
+        B) Data<br>
+        C) Context<br>
+        D) Objective</p>
+        <div class="answer"><strong>Answer: C</strong></div>
+        
+        <p><strong>Question 3:</strong> An executive audience typically needs:</p>
+        <p>A) Detailed charts with all data points<br>
+        B) Simple, fast-to-read charts with clear insights<br>
+        C) Interactive dashboards<br>
+        D) Technical statistical charts</p>
+        <div class="answer"><strong>Answer: B</strong></div>
+        
+        <p><strong>Question 4:</strong> Which data type has distinct groups like products or regions?</p>
+        <p>A) Continuous<br>
+        B) Mixed<br>
+        C) Categorical<br>
+        D) Time series</p>
+        <div class="answer"><strong>Answer: C</strong></div>
+        
+        <p><strong>Question 5:</strong> When you combine context and audience, what do you get?</p>
+        <p>A) Your data type<br>
+        B) Your chart<br>
+        C) Your objective<br>
+        D) Your title</p>
+        <div class="answer"><strong>Answer: C</strong></div>
+    </div>
+
+    <h2 id="module3">Module 3: Introducing Chart Chooser</h2>
+
+    <h3 id="lesson3-1">Lesson 1: What is Chart Chooser?</h3>
+    
+   
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/gDLov7P8a0U" 
+          frameborder="0" 
+          allowfullscreen>
+  </iframe>
+</div>
+    <h3 id="lesson3-2">Lesson 2: How Chart Chooser Implements the Framework</h3>
+    
+    <p>Remember the framework? Context, Audience, Data, and Chart Selection. Chart Chooser is built on this exact logic. Let me show you how each element maps to the tool.</p>
+    
+    <h4>Mapping 1: Context + Audience = Objective</h4>
+    
+    <p>In the framework, you analyze your context (what problem you're solving) and your audience (who needs the information). These two elements tell you your objective: what you're trying to communicate.</p>
+    
+    <p>Chart Chooser takes this and makes it practical with the <strong>Objectives filter</strong>.</p>
+    
+    <p>Instead of analyzing context and audience from scratch every time, Chart Chooser gives you a list of common objectives:</p>
+    <ul>
+        <li>Compare</li>
+        <li>Show trend</li>
+        <li>Show composition</li>
+        <li>Show distribution</li>
+        <li>Show relationship</li>
+    </ul>
+    
+    <p><strong>How to use it:</strong> Think about your context and audience, then select the objective that matches.</p>
+    
+    <p>Example: Context: Board meeting to allocate ressources to the most profitable product, this is a strategic decision. Audience: Executives who need quick insights, in this case the objective is to compare (they need to compare product performance). You select "Compare" in Chart Chooser.</p>
+    
+    <h4>Mapping 2: Data = Data Type</h4>
+    
+    <p>In the framework, you identify your data structure: categorical or and continuous</p>
+    
+    <p>Chart Chooser takes this and makes it practical with the <strong>Data Type filter</strong>.</p>
+    
+    <p>You look at your data and select:</p>
+    <ul>
+        <li>Categorical (distinct groups)</li>
+        <li>Continuous (measurements on a scale, especially time)</li>
+    </ul>
+    
+    <p>Example: Data: Revenue numbers by product, keep in mind that products are categorical. You select "Categorical" in Chart Chooser.</p>
+    
+    <h4>Mapping 3: Objective + Data Type = Chart Suggestions</h4>
+    
+    <p>In the framework, you combine your objective with your data possibilities to select a chart. Chart Chooser does this automatically. Once you have selected your objective and data type, it shows you appropriate chart options.</p>
+    
+    <p>For "Compare" + "Categorical," Chart Chooser suggests: Column chart, Bar chart, Radar chart, etc</p>
+    
+    <p>Each suggestion includes a preview, when to use it, and strengths/limitations.</p>
+    
+    <h4>The Complete Workflow</h4>
+    
+    <p><strong>Step 1:</strong> Analyze your situation using the framework</p>
+    <ul>
+        <li>Context: What problem am I solving?</li>
+        <li>Audience: Who needs this?</li>
+        <li>Data: What type of data do I have?</li>
+    </ul>
+    
+    <p><strong>Step 2:</strong> Translate to Chart Chooser inputs</p>
+    <ul>
+        <li>Context + Audience = Select Objective</li>
+        <li>Select Data Type</li>
+    </ul>
+    
+    <p><strong>Step 3:</strong> Review suggestions</p>
+    <ul>
+        <li>Chart Chooser shows some options</li>
+        <li>Read the descriptions</li>
+        <li>Consider your specific needs</li>
+    </ul>
+    
+    <p><strong>Step 4:</strong> Make your selection</p>
+    <ul>
+        <li>Choose the chart that best fits your situation</li>
+        <li>Apply design principles (I will cover this in Module 4)</li>
+    </ul>
+  
+  <h3 id="lesson3-3">Lesson 3: Knowledge Check</h3>
+    <div class="quiz">
+        <h3>Module 3 Quiz</h3>
+        
+        <p><strong>Question 1:</strong> What two main inputs does Chart Chooser require?</p>
+        <p>A) Color scheme and chart size<br>
+        B) Objective and data type<br>
+        C) Title and axis labels<br>
+        D) Context and audience</p>
+        <div class="answer"><strong>Answer: B</strong></div>
+        
+        <p><strong>Question 2:</strong> In Chart Chooser, Context + Audience translate to:</p>
+        <p>A) Data type<br>
+        B) Chart selection<br>
+        C) Objective<br>
+        D) Design style</p>
+        <div class="answer"><strong>Answer: C</strong></div>
+        
+        <p><strong>Question 3:</strong> If you need to compare categorical data, which Chart Chooser objective should you select?</p>
+        <p>A) Show trend<br>
+        B) Show composition<br>
+        C) Compare<br>
+        D) Show distribution</p>
+        <div class="answer"><strong>Answer: C</strong></div>
+    </div>
+
+    <h2 id="module4">Module 4: Design Basics</h2>
+
+    <h3 id="lesson4-1">Lesson 1: Cognitive Load Basics</h3>
+    
+    <p>You have selected the right chart type using the framework and Chart Chooser. But your job isn't done yet. Even the right chart can fail if it is poorly designed. This is where cognitive load comes in.</p>
+    
+    <h4>What is Cognitive Load?</h4>
+    
+    <p>Cognitive load is the mental effort required to process information. Your audience's brain has limited capacity</p>
+    
+    <p>When someone looks at your chart, their brain is working by reading labels, identifying patterns, comparing values, connecting information, and drawing conclusions. Every element in your chart demands mental effort.</p>
+    
+    <h4>The Principle</h4>
+    
+    <p><strong>Your audience has a fixed amount of mental capacity. Don't waste it on bad design.</strong></p>
+    
+    <p><strong>Interactive Demo:</strong> Compare high vs low cognitive load charts. The low-load chart makes it easier for users to quickly see comparisons by ordering values from high to low, adding useful details such as labels on top of each column, and removing distractions like unnecessary colors.</p>
+    
+    <div>
+        <button onclick="showHighLoad()">High Cognitive Load (Bad)</button>
+        <button onclick="showLowLoad()">Low Cognitive Load (Good)</button>
+    </div>
+    
+    <div id="cognitive-chart" class="chart-container"></div>
+    
+    <h4>Three Quick Wins for Reducing Cognitive Load</h4>
+    
+    <p><strong>1. Order your data</strong></p>
+    <p>When you arrange columns from highest to lowest, the pattern becomes instantly obvious. The audience doesn't have to work to understand the ranking. Order to show rankings or comparisons, such as Time series, to keep chronological order. Natural categories (S, M, L, XL) to maintain natural order.</p>
+    
+    <p><strong>2. Use direct labels instead of legends</strong></p>
+    <p>Instead of forcing eyes to jump between chart and legend, place labels directly on the data points. This eliminates split attention where the brain has to work harder to connect information.</p>
+    
+    <p><strong>3. Highlight what matters</strong></p>
+    <p>If Product D is the top seller, make its line a bold color and turn the other lines into light grey. Product D immediately stands out. The audience doesn't have to work to find the key product.</p>
+    
+    <h4>The Design Principle</h4>
+    
+    <p><strong>Every element in your chart should help understanding. If it is not helping, it is hurting.</strong></p>
+    
+    <p>Ask yourself:</p>
+    <ul>
+        <li>Does this color encode information, or is it just decoration?</li>
+        <li>Does this label help or clutter?</li>
+        <li>Does this gridline guide the eye or create noise?</li>
+        <li>Does this order reveal patterns or hide them?</li>
+    </ul>
+
+    <h3 id="lesson4-2">Lesson 2: Accessibility Basics</h3>
+    
+    <p>Accessibility isn't just about compliance or ticking boxes. It's about ensuring that everyone can use your charts, whether they have a temporary or permanent loss of vision, cognitive ability, or are limited by the technology they are using.</p>
+    
+    <p>Here's the reality: <strong>15-20% of your audience has some form of visual impairment.</strong> That could be colorblindness, low vision, or complete blindness using a screen reader.</p>
+    
+    <p>If your charts aren't accessible, you're excluding a significant portion of your audience.</p>
+    
+    <h4>What Makes a Chart Accessible?</h4>
+    
+    <p><strong>1. Color is not the only way to distinguish data</strong></p>
+    
+    <p>This chart uses color to distinguish 3 products. But for someone with red or green colorblindness, some lines look identical.</p>
+    
+    <p><strong>The fix: Use patterns or shapes in addition to color</strong></p>
+    
+    <p>Now each line has both a unique color and a unique pattern (dashed, dotted, solid). Even if someone can't see the colors, they can distinguish the lines.</p>
+    
+    <div id="accessibility-chart" class="chart-container"></div>
+    
+    <p><strong>2. Text contrast is sufficient</strong></p>
+    
+    <p>Labels and titles need sufficient contrast to be readable. The standard: WCAG AA requires a contrast ratio of at least 4.5:1 for normal text.</p>
+    
+    <p><strong>3. Screen readers can navigate the chart</strong></p>
+    
+    <p>People using screen readers can't see your chart at all. They need an alternative way to understand the data.</p>
+    
+    <p>Highcharts has an accessibility module that makes charts keyboard-navigable and screen-reader friendly. When enabled, screen reader users can navigate through data points with arrow keys, hear data values announced, and understand the structure and purpose of the chart.</p>
+    
+    <p><strong>4. Meaningful chart descriptions</strong></p>
+    
+    <p>Don't just describe what someone can see, provide the insight.</p>
+    
+    <p>Here I have a bad and a good accessibility description:<br/>Bad description: "A column chart with four bars of different heights."<br>
+    Good description: "Annual revenue by product. Product D leads with $890K (43% of total), followed by Product A at $650K. Product B shows the lowest performance at $480K."</p>
+    
+    <h4>Quick Accessibility Checklist</h4>
+    
+    <ul>
+        <li>Use color + pattern/shape to distinguish data</li>
+        <li>Ensure text has sufficient contrast (4.5:1 minimum)</li>
+        <li>Include Highcharts accessibility module</li>
+        <li>Provide meaningful chart descriptions</li>
+        <li>Test keyboard navigation</li>
+    </ul>
+
+    <h3 id="lesson4-3">Lesson 3: Knowledge Check</h3>
+
+    <div class="quiz">
+        <h3>Module 4 Quiz</h3>
+        
+        <p><strong>Question 1:</strong> Cognitive load refers to:</p>
+        <p>A) The file size of your chart<br>
+        B) The mental effort required to process information<br>
+        C) The number of data points in your chart<br>
+        D) The technical complexity of creating the chart</p>
+        <div class="answer"><strong>Answer: B</strong></div>
+        
+        <p><strong>Question 2:</strong> Which of these reduces cognitive load?</p>
+        <p>A) Using 10 different colors for 10 data points<br>
+        B) Placing the legend far from the chart<br>
+        C) Ordering data from highest to lowest to reveal patterns<br>
+        D) Adding 3D effects to make the chart more interesting</p>
+        <div class="answer"><strong>Answer: C</strong></div>
+        
+        <p><strong>Question 3:</strong> What percentage of people have some form of visual impairment?</p>
+        <p>A) 1-2%<br>
+        B) 5-8%<br>
+        C) 15-20%<br>
+        D) 30-35%</p>
+        <div class="answer"><strong>Answer: C</strong></div>
+    </div>
+
+
+    <h2 id="wrap-up">Course Wrap-Up</h2>
+
+    <p>You made it! Congratulations on completing the <strong>Introduction to Data Visualization Framework Course</strong></p>
+
+    <p>You now have a practical framework for creating charts that actually help people make decisions. No more guessing which chart to use or defaulting to whatever feels familiar.</p>
+    
+    <p>Throughout the course, you have learned how to:</p>
+    <ul>
+      <li>Use the three-question framework (Context, Audience, Data) to guide every chart you create.</li>
+      <li>Recognize when you are solving a strategic problem versus an operational one, and adjust your approach accordingly.</li>
+      <li>Make charts that work for your specific audience, whether that is a time-pressed executive or a detail-hungry analyst.</li>
+      <li>Know the difference between categorical and continuous data, and why it matters for chart selection.</li>
+      <li>Turn your framework analysis into actual chart choices using Chart Chooser.</li>
+      <li>Reduce cognitive load, so your audience spends less mental energy decoding and more time understanding.</li>
+      <li>Build accessible charts that work for everyone, including people with visual impairments.</li>
+    </ul>
+    
+    <p><b>One more thing</b> This framework isn't a rulebook. It is a thinking tool. The goal isn't to mechanically follow steps, it's to ask better questions before you start designing. The more you use it, the more natural it becomes.</p>
+    
+    <p>Want to go deeper?</p>
+
+    <ul>
+
+        <li><a href="https://www.highcharts.com/chartchooser/" target="_blank">Highcharts Chart Chooser.</a></li>
+        <li><a href="https://www.highcharts.com/blog/tutorials/how-to-choose-the-right-chart/" target="_blank">How to choose the right chart.</a></li>
+             <li><a href="https://www.highcharts.com/demo" target="_blank">Highcharts demo page</a></li>
+             <li><a href="https://www.highcharts.com/docs/accessibility/accessibility-module" target="_blank">Highcharts accessibility module documentation.</a></li>
+    </ul>
+  
+
+    <hr>
+    <!--p><a href="course2.html">Next: Course 2: Core Elements →</a></p-->
+
+    <script>
+        // Context charts
+        function showStrategic() {
+            Highcharts.chart('context-chart', {
+                chart: { type: 'column' },
+                title: { text: 'Strategic Context: Product D drives 43% of revenue' },
+                subtitle: { text: 'Annual totals: Simple and clear for board decision' },
+                xAxis: { categories: ['Product D', 'Product A', 'Product C', 'Product B'] },
+                yAxis: { title: { text: 'Revenue ($)' } },
+                series: [{ name: 'Revenue', data: [890000, 650000, 520000, 480000], showInLegend: false }]
+            });
+        }
+        
+        function showOperational() {
+           
+Highcharts.chart('context-chart', {
+            title: {
+                text: 'Operational Context: Monthly Revenue by Product',
+                align: 'center'
+            },
+            subtitle: {
+                text: 'Multiple lines to find patterns',
+                align: 'center'
+            },
+            yAxis: {
+                title: {
+                    text: 'Revenue (CAD)'
+                },
+                labels: {
+                    formatter: function() {
+                        return '$' + (this.value / 1000).toFixed(0) + 'K';
+                    }
+                }
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                accessibility: {
+                    rangeDescription: 'Range: January to December'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    }
+                }
+            },
+            colors: ['#999999', '#999999', '#999999', 'rgb(254,106,53)'],
+            series: [{
+                name: 'Product A',
+                lineWidth: 1.5,
+                zIndex: 1,
+                data: [199865, 199865, 199865, 199865, 199865, 199865, 199865, 199865, 199865, 199865, 199865, 199865]
+            }, {
+                name: 'Product B',
+                lineWidth: 1.5,
+                zIndex: 1,
+                data: [197027, 195424, 203943, 189473, 202898, 199325, 201088, 262487, 168645, 170863, 199283, 194752]
+            }, {
+                name: 'Product C',
+                lineWidth: 1.5,
+                zIndex: 1,
+                data: [250065, 260290, 266165, 260577, 264263, 269688, 250433, 326001, 228211, 221128, 250008, 267954]
+            }, {
+                name: 'Product D',
+                lineWidth: 4,
+                zIndex: 10,
+                data: [390924, 404099, 401386, 401495, 421500, 418629, 384163, 494966, 313067, 338718, 375445, 387155]
+            }],
+            tooltip: {
+                shared: true,
+                formatter: function() {
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    let tooltip = '<b>' + months[this.x] + '</b><br/>';
+                    this.points.forEach(point => {
+                        tooltip += '<span style="color:' + point.color + '">' + point.series.name + '</span>: $' + Highcharts.numberFormat(point.y, 0) + ' CAD<br/>';
+                    });
+                    return tooltip;
+                }
+            }
+        });
+        }
+        
+        function showAnalytical() {
+            Highcharts.chart('context-chart', {
+                chart: { type: 'column' },
+                title: { text: 'Analytical Context: Revenue by product and region' },
+                subtitle: { text: 'Multiple columns for pattern exploration' },
+                xAxis: { categories: ['Product A', 'Product B', 'Product C', 'Product D'] },
+                yAxis: { title: { text: 'Revenue ($)' } },
+                series: [
+                    { name: 'North', data: [250000, 180000, 200000, 420000] },
+                    { name: 'Central', data: [200000, 150000, 180000, 280000] },
+                    { name: 'South', data: [200000, 150000, 140000, 190000] }
+                ]
+            });
+        }
+        
+        // Audience charts
+        function showExecutive() {
+            Highcharts.chart('audience-chart', {
+                chart: { type: 'column' },
+                title: { text: 'Executive: Product D drives 60% of growth' },
+                subtitle: { text: 'Simple column chart with clear insight' },
+                xAxis: { categories: ['Product D', 'All Others'] },
+                yAxis: { title: { text: 'Growth ($)' } },
+                series: [{ 
+                    name: 'Growth', 
+                    data: [600000, 400000],
+                    dataLabels: { enabled: true, format: '${point.y:,.0f}' },
+                    showInLegend: false
+                }]
+            });
+        }
+        
+        function showTechnical() {
+            Highcharts.chart('audience-chart', {
+                chart: { type: 'line' },
+                title: { text: 'Technical: Monthly revenue by product (Last 12 months)' },
+                subtitle: { text: 'All data visible with detailed tooltips' },
+                xAxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] },
+                yAxis: { title: { text: 'Revenue ($)' } },
+                series: [
+                    { name: 'Product A', data: [50000, 52000, 54000, 55000, 56000, 57000, 58000, 59000, 60000, 61000, 62000, 63000] },
+                    { name: 'Product B', data: [40000, 41000, 39000, 42000, 43000, 41000, 44000, 45000, 43000, 46000, 47000, 48000] },
+                    { name: 'Product C', data: [43000, 44000, 45000, 44000, 45000, 46000, 45000, 46000, 47000, 46000, 47000, 48000] },
+                    { name: 'Product D', data: [70000, 72000, 75000, 78000, 80000, 83000, 85000, 88000, 90000, 93000, 95000, 98000] }
+                ]
+            });
+        }
+        
+        function showGeneral() {
+            Highcharts.chart('audience-chart', {
+                chart: { type: 'column' },
+                title: { text: 'General: Total Revenue by Product (2024)' },
+                subtitle: { text: 'Clear labels and self-explanatory' },
+                xAxis: { categories: ['Product A', 'Product B', 'Product C', 'Product D'] },
+                yAxis: { title: { text: 'Revenue ($)' } },
+                series: [{ 
+                    name: 'Revenue', 
+                    data: [650000, 480000, 520000, 890000],
+                    dataLabels: { enabled: true, format: '${point.y:,.0f}' },
+                    showInLegend: false
+                }]
+            });
+        }
+        
+        // Data type charts
+        function showCategorical() {
+            Highcharts.chart('data-chart', {
+                chart: { type: 'column' },
+                title: { text: 'Categorical Data: Column Chart' },
+                subtitle: { text: 'Distinct categories (Products, Regions, etc.)' },
+                xAxis: { categories: ['North', 'South', 'East', 'West'] },
+                yAxis: { title: { text: 'Sales ($)' } },
+                series: [{ name: 'Sales', data: [120000, 95000, 110000, 85000], showInLegend: false }]
+            });
+        }
+        
+        function showContinuous() {
+            Highcharts.chart('data-chart', {
+                chart: { type: 'spline' },
+                title: { text: 'Continuous Data: Line Chart' },
+                subtitle: { text: 'Time series or measurements with natural order' },
+                xAxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] },
+                yAxis: { title: { text: 'Sales ($)' } },
+                series: [{ name: 'Sales', data: [85000, 88000, 92000, 89000, 95000, 98000] }]
+            });
+        }
+        
+       
+        // Cognitive load charts
+        function showHighLoad() {
+            Highcharts.chart('cognitive-chart', {
+                chart: { type: 'column', options3d: { enabled: true, alpha: 15, beta: 15 } },
+                title: { text: 'High Cognitive Load (BAD DESIGN)' },
+                xAxis: { categories: ['Product A', 'Product C', 'Product B', 'Product D'] },
+                yAxis: { title: { text: 'Revenue' } },
+                series: [{
+                    name: 'Revenue',
+                    data: [
+                        { y: 650000, color: '#FF0000' },
+                        { y: 520000, color: '#00FF00' },
+                        { y: 480000, color: '#0000FF' },
+                        { y: 890000, color: '#FFFF00' }
+                    ]
+                }]
+            });
+        }
+        
+        function showLowLoad() {
+            Highcharts.chart('cognitive-chart', {
+                chart: { type: 'column' },
+                title: { text: 'Low Cognitive Load (GOOD DESIGN)' },
+                subtitle: { text: 'Product D leads with 43% of revenue' },
+                xAxis: { categories: ['Product D', 'Product A', 'Product C', 'Product B'] },
+                yAxis: { title: { text: 'Revenue ($)' } },
+                series: [{
+                    name: 'Revenue',
+                    data: [890000, 650000, 520000, 480000],
+                    color: '#434348',
+                    dataLabels: { enabled: true, format: '${point.y:,.0f}' },
+                    showInLegend: false
+                }]
+            });
+        }
+        
+        // Accessibility chart
+        Highcharts.chart('accessibility-chart', {
+            chart: { type: 'spline' },
+            title: { text: 'Accessible Chart: Color + Pattern' },
+            xAxis: { categories: ['Q1', 'Q2', 'Q3', 'Q4'] },
+            yAxis: { title: { text: 'Sales' } },
+            series: [
+                { name: 'Product A', data: [100, 120, 110, 130], dashStyle: 'Solid', marker: { symbol: 'circle' } },
+                { name: 'Product B', data: [80, 85, 80, 95], dashStyle: 'Dash', marker: { symbol: 'square' } },
+                { name: 'Product C', data: [90, 95, 90, 105], dashStyle: 'Dot', marker: { symbol: 'triangle' } }
+            ]
+        });
+        
+        // Initialize with first charts
+        showStrategic();
+        showExecutive();
+        showCategorical();
+        showLowLoad();
+    </script>
+</body>
+</html>
