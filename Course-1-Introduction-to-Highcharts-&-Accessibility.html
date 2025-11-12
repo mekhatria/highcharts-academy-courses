@@ -252,6 +252,60 @@
     .highcharts-data-table tbody tr:nth-child(even) {
       background: var(--highcharts-neutral-color-3, #fff);
     }
+
+    /* codePen and JSfiddle */
+    .demo-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .demo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .demo-link:hover {
+            background: #f8f8f8;
+            border-color: #d0d0d0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+        }
+
+        /* External link icon */
+        .external-icon {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid currentColor;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .external-icon::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-top: 1.5px solid currentColor;
+            border-right: 1.5px solid currentColor;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 4px;
+            right: 4px;
+        }
+    /************************/
   </style>
 </head>
 
@@ -394,6 +448,21 @@
     </div>
 
   </figure>
+
+
+  <div class="demo-links">
+    <a href="https://jsfiddle.net/mushigh/j2gx4zvr/" class="demo-link" target="_blank">
+        <span>JS Fiddle</span>
+        <div class="external-icon"></div>
+    </a>
+
+    <a href="https://codepen.io/mushigh/pen/pvyJMMj" class="demo-link" target="_blank">
+        <span>Codepen</span>
+        <div class="external-icon"></div>
+    </a>
+</div>
+
+
   
   <p> <b>Extra:</b> Here's a video that shows a screen reader user navigating an accessible chart.</p>
    <div class="video-container">
@@ -418,6 +487,26 @@
     <div id="rainfall-chart"></div>
     <p class="highcharts-description">The final, accessible version of the chart.</p>
   </figure>
+
+
+
+
+
+  <div class="demo-links">
+    <a href="https://jsfiddle.net/mushigh/qrLacnmv" class="demo-link" target="_blank">
+        <span>JS Fiddle</span>
+        <div class="external-icon"></div>
+    </a>
+
+    <a href="https://codepen.io/mushigh/pen/QwNjLGj" class="demo-link" target="_blank">
+        <span>Codepen</span>
+        <div class="external-icon"></div>
+    </a>
+</div>
+
+
+
+
 
   <h3 id="lesson1-4">Lesson 4: Knowledge Check</h3>
 
@@ -485,6 +574,20 @@
     <iframe src="https://www.youtube.com/embed/ZtHi4E5eOkY?si=2JOVlbUqmjtVQ5hT" frameborder="0"></iframe>
   </div>
 
+  <iframe width="100%" height="950" src="//jsfiddle.net/mushigh/417m0xju/embedded/result/" frameborder="0" loading="lazy" allowtransparency="true" allowfullscreen="true"></iframe>
+  <div class="demo-links">
+    <a href="https://jsfiddle.net/mushigh/417m0xju/" class="demo-link" target="_blank">
+        <span>JS Fiddle</span>
+        <div class="external-icon"></div>
+    </a>
+
+    <a href="https://codepen.io/mushigh/pen/raeONWZ" class="demo-link" target="_blank">
+        <span>Codepen</span>
+        <div class="external-icon"></div>
+    </a>
+</div>
+
+
   <h3 id="lesson2-2">Lesson 2: Tools for accessible palettes</h3>
   <h4>What you will learn</h4>
   <ul>
@@ -494,6 +597,9 @@
   <div class="video-container">
     <iframe src="https://www.youtube.com/embed/TXTkiAQ336A?si=T71vDGK0PD81Nk7p" frameborder="0"></iframe>
   </div>
+
+
+
 
   <h3 id="lesson2-3">Lesson 3: Pattern fills</h3>
   <h4>What you will learn</h4>
@@ -505,6 +611,37 @@
   <div class="video-container">
     <iframe src="https://www.youtube.com/embed/tMC8Xk7ebA4?si=Fpmm5FRBPvCQmacR" frameborder="0"></iframe>
   </div>
+
+
+  <iframe width="100%" height="950" src="//jsfiddle.net/mushigh/5aw9mesv/embedded/result/" frameborder="0" loading="lazy" allowtransparency="true" allowfullscreen="true"></iframe>
+
+  <div class="demo-links">
+    <a href="https://jsfiddle.net/mushigh/5aw9mesv/" class="demo-link" target="_blank">
+        <span>JS Fiddle</span>
+        <div class="external-icon"></div>
+    </a>
+
+    <a href="https://codepen.io/mushigh/pen/ogxjNWv" class="demo-link" target="_blank">
+        <span>Codepen</span>
+        <div class="external-icon"></div>
+    </a>
+</div>
+
+
+<iframe width="100%" height="500" src="//jsfiddle.net/mushigh/840agz7f/embedded/result/" frameborder="0" loading="lazy" allowtransparency="true" allowfullscreen="true"></iframe>
+
+<div class="demo-links">
+    <a href="https://jsfiddle.net/mushigh/840agz7f/" class="demo-link" target="_blank">
+        <span>JS Fiddle</span>
+        <div class="external-icon"></div>
+    </a>
+
+    <a href="https://codepen.io/mushigh/pen/gbraOxL" class="demo-link" target="_blank">
+        <span>Codepen</span>
+        <div class="external-icon"></div>
+    </a>
+</div>
+
 
   <h3 id="lesson2-4">Lesson 4: Additional accessibility features</h3>
   <h4>What you will learn</h4>
