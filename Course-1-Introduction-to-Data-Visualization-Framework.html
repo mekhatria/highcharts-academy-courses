@@ -245,6 +245,61 @@
         .highcharts-data-table tbody tr:nth-child(even) {
           background: var(--highcharts-neutral-color-3, #fff);
         }
+
+
+         /* codePen and JSfiddle */
+    .demo-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .demo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .demo-link:hover {
+            background: #f8f8f8;
+            border-color: #d0d0d0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+        }
+
+        /* External link icon */
+        .external-icon {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid currentColor;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .external-icon::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-top: 1.5px solid currentColor;
+            border-right: 1.5px solid currentColor;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 4px;
+            right: 4px;
+        }
+    /************************/
       </style>
 </head>
 <body>
@@ -355,6 +410,39 @@
           allowfullscreen>
   </iframe>
 </div>
+
+
+
+<p>Example 1</p>
+<div class="demo-links">
+  <a href="https://jsfiddle.net/mushigh/hjdc2qgm/" class="demo-link" target="_blank">
+      <span>JS Fiddle</span>
+      <div class="external-icon"></div>
+  </a>
+
+  <a href="https://codepen.io/mushigh/pen/vEGNgGY" class="demo-link" target="_blank">
+      <span>Codepen</span>
+      <div class="external-icon"></div>
+  </a>
+</div>
+
+
+<p>Example 2</p>
+<div class="demo-links">
+  <a href="https://jsfiddle.net/mushigh/gt3xvkm4/" class="demo-link" target="_blank">
+      <span>JS Fiddle</span>
+      <div class="external-icon"></div>
+  </a>
+
+  <a href="https://codepen.io/mushigh/pen/WbwQRoO" class="demo-link" target="_blank">
+      <span>Codepen</span>
+      <div class="external-icon"></div>
+  </a>
+</div>
+
+
+
+
     <h3 id="lesson2-2">Lesson 2: Context - What problem are you solving?</h3>
     
 
